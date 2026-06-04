@@ -60,7 +60,7 @@ export default function App() {
   }, [setIsPlaying])
 
   return (
-    <div className="min-h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
+    <div className="h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
       {/* Header */}
       <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center justify-between shrink-0">
         <span className="text-retro-accent text-sm uppercase tracking-widest font-bold">
@@ -137,7 +137,15 @@ export default function App() {
                   placeholder="Filter tracks..."
                 />
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div
+                className="flex-1 overflow-y-auto"
+                style={{
+                  backgroundImage: 'url(/16-bit_memories.jpg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundAttachment: 'local',
+                }}
+              >
                 {loadingTracks ? (
                   <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
                 ) : (
@@ -151,8 +159,15 @@ export default function App() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <span className="text-retro-muted text-xs uppercase tracking-widest">
+            <div
+              className="flex-1 flex items-end justify-center pb-4"
+              style={{
+                backgroundImage: 'url(/16-bit_memories.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <span className="text-retro-muted text-xs uppercase tracking-widest" style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 12px' }}>
                 SELECT AN ARTIST
               </span>
             </div>

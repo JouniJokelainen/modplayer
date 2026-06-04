@@ -16,7 +16,7 @@ export function TrackList({ tracks, creator, currentUrl, onPlay }: Props) {
         const url = `/modland/pub/modules/Protracker/${encodeURIComponent(creator)}/${encodeURIComponent(name)}`
         const active = currentUrl === url
         return (
-          <li key={name} className={`border-b border-retro-border ${active ? 'bg-retro-active' : ''}`}>
+          <li key={name} className={`border-b border-retro-border ${active ? 'bg-retro-active' : 'bg-black/70'}`}>
             <button
               onClick={() => onPlay(name)}
               className={`w-full text-left px-2 py-1.5 font-mono text-xs uppercase tracking-wide flex items-center gap-2 transition-colors ${
