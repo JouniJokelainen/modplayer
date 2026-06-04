@@ -1,5 +1,3 @@
-import { Play } from 'lucide-react'
-
 interface Props {
   tracks: string[]
   creator: string
@@ -8,24 +6,28 @@ interface Props {
 }
 
 export function TrackList({ tracks, creator, currentUrl, onPlay }: Props) {
-  if (tracks.length === 0) return <p className="text-zinc-500 text-sm">No tracks found.</p>
+  if (tracks.length === 0) {
+    return <p className="text-retro-muted text-xs uppercase px-2 py-2">NO TRACKS FOUND.</p>
+  }
 
   return (
-    <ul className="space-y-1">
+    <ul>
       {tracks.map((name) => {
         const url = `/modland/pub/modules/Protracker/${encodeURIComponent(creator)}/${encodeURIComponent(name)}`
         const active = currentUrl === url
         return (
-          <li key={name}>
+          <li key={name} className={`border-b border-retro-border ${active ? 'bg-retro-active' : ''}`}>
             <button
               onClick={() => onPlay(name)}
-              className={`w-full text-left px-3 py-2 rounded flex items-center gap-2 text-sm transition-colors ${
+              className={`w-full text-left px-2 py-1.5 font-mono text-xs uppercase tracking-wide flex items-center gap-2 transition-colors ${
                 active
-                  ? 'bg-zinc-600 text-white'
-                  : 'hover:bg-zinc-800 text-zinc-300'
+                  ? 'text-retro-accent font-bold'
+                  : 'text-retro-text hover:text-retro-accent hover:bg-[#1e1e00]'
               }`}
             >
-              <Play size={12} className="shrink-0" />
+              <span className={`w-3 shrink-0 font-bold ${active ? 'text-retro-accent' : 'text-retro-dark'}`}>
+                {active ? '>' : ''}
+              </span>
               {name}
             </button>
           </li>

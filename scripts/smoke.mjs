@@ -22,7 +22,7 @@ try {
   await page.screenshot({ path: 'scripts/screenshots/02-creators-loaded.png', fullPage: false })
 
   // Search for a small creator folder
-  await page.fill('input[placeholder="Search creators..."]', '4-mat')
+  await page.fill('input[placeholder="FILTER ARTISTS..."]', '4-mat')
   await page.waitForTimeout(300)
   await page.screenshot({ path: 'scripts/screenshots/03-search.png', fullPage: false })
 

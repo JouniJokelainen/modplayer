@@ -6,24 +6,30 @@ interface Props {
 }
 
 export function TrackHistory({ history, onPlay }: Props) {
-  if (history.length === 0) return null
-
   return (
-    <div>
-      <h2 className="text-zinc-400 text-xs uppercase tracking-wider mb-2">Recently played</h2>
-      <ul className="space-y-1">
-        {history.map((track) => (
-          <li key={track.url}>
-            <button
-              onClick={() => onPlay(track)}
-              className="w-full text-left px-3 py-2 rounded hover:bg-zinc-800 transition-colors"
-            >
-              <p className="text-zinc-300 text-sm truncate">{track.name}</p>
-              <p className="text-zinc-500 text-xs truncate">{track.creator}</p>
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="border border-retro-border bg-retro-dark">
+      <div className="px-2 py-1 border-b border-retro-border bg-retro-panel">
+        <span className="text-retro-muted text-xs uppercase tracking-widest">RECENTLY PLAYED</span>
+      </div>
+      {history.length === 0 ? (
+        <p className="text-retro-muted text-xs uppercase px-2 py-2">NO HISTORY YET.</p>
+      ) : (
+        <ul>
+          {history.map((track, i) => (
+            <li key={track.url} className={i < history.length - 1 ? 'border-b border-retro-border' : ''}>
+              <button
+                onClick={() => onPlay(track)}
+                className="w-full text-left px-2 py-1.5 hover:bg-[#1e1e00] group"
+              >
+                <p className="text-retro-cyan text-xs uppercase truncate font-mono group-hover:text-retro-accent">
+                  {track.name}
+                </p>
+                <p className="text-retro-muted text-xs uppercase truncate font-mono">{track.creator}</p>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

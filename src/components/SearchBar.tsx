@@ -10,8 +10,8 @@ export function SearchBar({ value, onChange, placeholder }: Props) {
       type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder ?? 'Search...'}
-      className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+      placeholder={placeholder?.toUpperCase() ?? 'SEARCH...'}
+      className="w-full px-2 py-1.5 bg-retro-dark border border-retro-border text-retro-text font-mono text-xs uppercase tracking-wider placeholder-retro-muted focus:outline-none focus:border-retro-accent focus:text-retro-accent"
     />
   )
 }

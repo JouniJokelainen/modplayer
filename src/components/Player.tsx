@@ -1,4 +1,3 @@
-import { Play, Pause } from 'lucide-react'
 import { useEffect } from 'react'
 import { Track } from '../store/playback'
 
@@ -20,26 +19,48 @@ export function Player({ track, isPlaying, onToggle }: Props) {
     return () => document.removeEventListener('keydown', handler)
   }, [onToggle])
 
-  if (!track) {
-    return (
-      <div className="p-4 bg-zinc-900 border border-zinc-800 rounded text-zinc-500 text-sm">
-        No track loaded. Select a track to play.
-      </div>
-    )
-  }
-
   return (
-    <div className="p-4 bg-zinc-900 border border-zinc-800 rounded flex items-center gap-4">
-      <button
-        onClick={onToggle}
-        className="p-2 bg-zinc-700 hover:bg-zinc-600 rounded-full transition-colors"
-        title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-      >
-        {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-      </button>
-      <div className="overflow-hidden">
-        <p className="text-white text-sm font-medium truncate">{track.name}</p>
-        <p className="text-zinc-400 text-xs truncate">{track.creator}</p>
+    <div className="border border-retro-border bg-retro-dark">
+      <div className="px-2 py-1 border-b border-retro-border bg-retro-panel">
+        <span className="text-retro-muted text-xs uppercase tracking-widest">PLAYER</span>
+      </div>
+
+      <div className="p-2 space-y-1.5">
+        <div className="flex items-center gap-2">
+          <span className="text-retro-muted text-xs uppercase w-16 shrink-0">SONG:</span>
+          <span className="text-retro-cyan text-xs uppercase truncate font-mono">
+            {track ? track.name : '---'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-retro-muted text-xs uppercase w-16 shrink-0">ARTIST:</span>
+          <span className="text-retro-cyan text-xs uppercase truncate font-mono">
+            {track ? track.creator : '---'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-retro-muted text-xs uppercase w-16 shrink-0">STATUS:</span>
+          <span className={`text-xs uppercase font-mono font-bold ${isPlaying ? 'text-retro-accent' : 'text-retro-muted'}`}>
+            {track ? (isPlaying ? 'PLAYING' : 'PAUSED') : 'STOPPED'}
+          </span>
+        </div>
+      </div>
+
+      <div className="px-2 pb-2">
+        <button
+          onClick={onToggle}
+          disabled={!track}
+          className={`w-full py-1.5 text-xs uppercase tracking-widest font-mono font-bold border transition-colors ${
+            !track
+              ? 'border-retro-border text-retro-muted cursor-not-allowed'
+              : isPlaying
+              ? 'border-retro-accent text-retro-dark bg-retro-accent hover:bg-retro-accent-dim'
+              : 'border-retro-accent text-retro-accent hover:bg-retro-active'
+          }`}
+        >
+          {isPlaying ? '[ PAUSE ]' : '[ PLAY ]'}
+        </button>
+        <p className="text-retro-muted text-xs text-center mt-1 uppercase tracking-widest">SPACE TO TOGGLE</p>
       </div>
     </div>
   )

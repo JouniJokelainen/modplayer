@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    border-radius: 0 !important;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #1a1a1a;
+    color: #dddddd;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    background: #111;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #444;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c8d400;
+  }
+
+  ::selection {
+    background: #c8d400;
+    color: #111;
+  }
+}

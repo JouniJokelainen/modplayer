@@ -18,7 +18,8 @@
       "Bash(npm info *)",
       "Bash(curl -s \"https://lib.openmpt.org/files/libopenmpt/dev/\")",
       "Bash(pkill -f \"vite\")",
-      "Bash(timeout 20 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done')"
+      "Bash(timeout 20 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done')",
+      "Bash(python3 *)"
     ]
   }
 }

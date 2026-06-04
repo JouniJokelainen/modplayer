@@ -60,59 +60,86 @@ export default function App() {
   }, [setIsPlaying])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
-      <header className="border-b border-zinc-800 px-6 py-4">
-        <h1 className="text-lg font-semibold tracking-tight">Modplayer</h1>
+    <div className="min-h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
+      {/* Header */}
+      <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center justify-between shrink-0">
+        <span className="text-retro-accent text-sm uppercase tracking-widest font-bold">
+          MODPLAYER
+        </span>
+        <span className="text-retro-muted text-xs uppercase tracking-widest">
+          PROTRACKER STREAMING
+        </span>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Creator list */}
-        <aside className="w-64 border-r border-zinc-800 flex flex-col overflow-hidden">
-          <div className="p-3 border-b border-zinc-800">
+        {/* Creator sidebar */}
+        <aside className="w-56 border-r border-retro-border flex flex-col overflow-hidden bg-retro-panel shrink-0">
+          <div className="px-2 py-1 border-b border-retro-border">
+            <span className="text-retro-muted text-xs uppercase tracking-widest">ARTISTS</span>
+          </div>
+          <div className="p-2 border-b border-retro-border">
             <SearchBar
               value={creatorSearch}
               onChange={setCreatorSearch}
-              placeholder="Search creators..."
+              placeholder="Filter artists..."
             />
           </div>
-          <div className="flex-1 overflow-y-auto p-2">
-            {loadingCreators && <p className="text-zinc-500 text-sm p-2">Loading...</p>}
-            <ul className="space-y-0.5">
-              {filteredCreators.map((creator) => (
-                <li key={creator}>
-                  <button
-                    onClick={() => {
-                      setSelectedCreator(creator)
-                      setTrackSearch('')
-                    }}
-                    className={`w-full text-left px-3 py-1.5 rounded text-sm transition-colors ${
-                      selectedCreator === creator
-                        ? 'bg-zinc-700 text-white'
-                        : 'hover:bg-zinc-800 text-zinc-300'
-                    }`}
-                  >
-                    {creator}
-                  </button>
-                </li>
-              ))}
+          <div className="flex-1 overflow-y-auto">
+            {loadingCreators && (
+              <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING...</p>
+            )}
+            <ul>
+              {filteredCreators.map((creator) => {
+                const active = selectedCreator === creator
+                return (
+                  <li key={creator} className={`border-b border-retro-border ${active ? 'bg-retro-active' : ''}`}>
+                    <button
+                      onClick={() => { setSelectedCreator(creator); setTrackSearch('') }}
+                      className={`w-full text-left px-2 py-1.5 text-xs uppercase tracking-wide font-mono flex items-center gap-1.5 transition-colors ${
+                        active
+                          ? 'text-retro-accent font-bold'
+                          : 'text-retro-text hover:text-retro-accent hover:bg-[#1e1e00]'
+                      }`}
+                    >
+                      <span className="w-3 shrink-0 font-bold">{active ? '>' : ''}</span>
+                      {creator}
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </div>
+          {!loadingCreators && (
+            <div className="px-2 py-1 border-t border-retro-border bg-retro-dark">
+              <span className="text-retro-muted text-xs uppercase">
+                {filteredCreators.length} ARTISTS
+              </span>
+            </div>
+          )}
         </aside>
 
         {/* Track list */}
         <main className="flex-1 flex flex-col overflow-hidden">
+          <div className="px-2 py-1 border-b border-retro-border bg-retro-panel flex items-center justify-between shrink-0">
+            <span className="text-retro-muted text-xs uppercase tracking-widest">
+              {selectedCreator ? `TRACKS / ${selectedCreator.toUpperCase()}` : 'TRACKS'}
+            </span>
+            {!loadingTracks && selectedCreator && (
+              <span className="text-retro-muted text-xs uppercase">{filteredTracks.length} FILES</span>
+            )}
+          </div>
           {selectedCreator ? (
             <>
-              <div className="p-3 border-b border-zinc-800">
+              <div className="p-2 border-b border-retro-border bg-retro-panel shrink-0">
                 <SearchBar
                   value={trackSearch}
                   onChange={setTrackSearch}
-                  placeholder="Search tracks..."
+                  placeholder="Filter tracks..."
                 />
               </div>
-              <div className="flex-1 overflow-y-auto p-3">
+              <div className="flex-1 overflow-y-auto">
                 {loadingTracks ? (
-                  <p className="text-zinc-500 text-sm">Loading tracks...</p>
+                  <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
                 ) : (
                   <TrackList
                     tracks={filteredTracks}
@@ -124,16 +151,22 @@ export default function App() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-zinc-600">
-              Select a creator
+            <div className="flex-1 flex items-center justify-center">
+              <span className="text-retro-muted text-xs uppercase tracking-widest">
+                SELECT AN ARTIST
+              </span>
             </div>
           )}
         </main>
 
-        {/* Right sidebar: player + history */}
-        <aside className="w-72 border-l border-zinc-800 flex flex-col p-4 gap-4">
-          <Player track={currentTrack} isPlaying={isPlaying} onToggle={handleToggle} />
-          <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+        {/* Right panel */}
+        <aside className="w-64 border-l border-retro-border flex flex-col gap-0 bg-retro-panel shrink-0">
+          <div className="p-2 border-b border-retro-border">
+            <Player track={currentTrack} isPlaying={isPlaying} onToggle={handleToggle} />
+          </div>
+          <div className="p-2">
+            <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+          </div>
         </aside>
       </div>
     </div>
