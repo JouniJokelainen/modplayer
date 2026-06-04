@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm create *)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(kill %1)",
+      "Bash(chromium-cli *)",
+      "Bash(node -e \"require\\('@playwright/test'\\)\")",
+      "Bash(npx playwright *)",
+      "Bash(node *)",
+      "Bash(curl -sI \"https://lib.openmpt.org/files/libopenmpt/js/libopenmpt.js\")",
+      "Bash(curl -sI \"https://lib.openmpt.org/files/libopenmpt/js/release/libopenmpt.js\")",
+      "Bash(curl -s \"https://lib.openmpt.org/files/libopenmpt/js/\")",
+      "Bash(curl -s \"https://lib.openmpt.org/files/libopenmpt/\")",
+      "Bash(npm info *)",
+      "Bash(curl -s \"https://lib.openmpt.org/files/libopenmpt/dev/\")",
+      "Bash(pkill -f \"vite\")",
+      "Bash(timeout 20 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done')"
+    ]
+  }
+}
