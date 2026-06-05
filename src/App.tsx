@@ -6,14 +6,17 @@ import { SearchBar } from './components/SearchBar'
 import { TrackList } from './components/TrackList'
 import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
+import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
+import { MAX_FAVOURITES } from './store/playback'
 
 export default function App() {
   const [creatorSearch, setCreatorSearch] = useState('')
   const [selectedCreator, setSelectedCreator] = useState<string | null>(null)
   const [trackSearch, setTrackSearch] = useState('')
 
-  const { currentTrack, isPlaying, history, setCurrentTrack, setIsPlaying } = usePlaybackStore()
+  const { currentTrack, isPlaying, history, favourites, setCurrentTrack, setIsPlaying, toggleFavourite } =
+    usePlaybackStore()
 
   const { data: creators = [], isLoading: loadingCreators } = useCreators()
   const { data: tracks = [], isLoading: loadingTracks } = useTracks(selectedCreator)
@@ -38,6 +41,14 @@ export default function App() {
       console.error('Failed to load track', err)
     }
   }, [selectedCreator, setCurrentTrack, setIsPlaying])
+
+  const favouriteUrls = new Set(favourites.map((f) => f.url))
+
+  const handleToggleFavourite = useCallback((name: string) => {
+    if (!selectedCreator) return
+    const url = `/modland/pub/modules/Protracker/${encodeURIComponent(selectedCreator)}/${encodeURIComponent(name)}`
+    toggleFavourite({ creator: selectedCreator, name, url })
+  }, [selectedCreator, toggleFavourite])
 
   const handlePlayFromHistory = useCallback(async (track: Track) => {
     try {
@@ -151,7 +162,10 @@ export default function App() {
                       tracks={filteredTracks}
                       creator={selectedCreator}
                       currentUrl={currentTrack?.url ?? null}
+                      favouriteUrls={favouriteUrls}
+                      favouritesFull={favourites.length >= MAX_FAVOURITES}
                       onPlay={handlePlayTrack}
+                      onToggleFavourite={handleToggleFavourite}
                     />
                   )}
                 </div>
@@ -184,6 +198,13 @@ export default function App() {
           </div>
           <div className="p-2">
             <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+          </div>
+          <div className="px-2 pb-2">
+            <Favourites
+              favourites={favourites}
+              onPlay={handlePlayFromHistory}
+              onRemove={toggleFavourite}
+            />
           </div>
         </aside>
       </div>

@@ -24,7 +24,9 @@
       "Bash(pkill -f \"vite --port\")",
       "Bash(curl -s http://localhost:5178)",
       "Bash(pkill -f vite)",
-      "PowerShell(Remove-Item *)"
+      "PowerShell(Remove-Item *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }
