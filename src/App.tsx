@@ -62,12 +62,9 @@ export default function App() {
   return (
     <div className="h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
       {/* Header */}
-      <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center justify-between shrink-0">
-        <span className="text-retro-accent text-sm uppercase tracking-widest font-bold">
+      <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center shrink-0">
+        <span className="text-retro-accent uppercase tracking-widest font-bold" style={{ fontSize: '24px' }}>
           MODPLAYER
-        </span>
-        <span className="text-retro-muted text-xs uppercase tracking-widest">
-          PROTRACKER STREAMING
         </span>
       </header>
 
