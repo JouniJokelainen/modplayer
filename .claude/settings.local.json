@@ -20,7 +20,11 @@
       "Bash(pkill -f \"vite\")",
       "Bash(timeout 20 bash -c 'until curl -sf http://localhost:5173 >/dev/null; do sleep 1; done')",
       "Bash(python3 *)",
-      "Bash(curl -s http://localhost:5177)"
+      "Bash(curl -s http://localhost:5177)",
+      "Bash(pkill -f \"vite --port\")",
+      "Bash(curl -s http://localhost:5178)",
+      "Bash(pkill -f vite)",
+      "PowerShell(Remove-Item *)"
     ]
   }
 }

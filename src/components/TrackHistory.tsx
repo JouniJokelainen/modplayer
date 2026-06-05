@@ -19,7 +19,7 @@ export function TrackHistory({ history, onPlay }: Props) {
             <li key={track.url} className={i < history.length - 1 ? 'border-b border-retro-border' : ''}>
               <button
                 onClick={() => onPlay(track)}
-                className="w-full text-left px-2 py-1.5 hover:bg-[#1e1e00] group"
+                className="w-full text-left px-2 py-1.5 hover:bg-[#0a2a0a] group"
               >
                 <p className="text-retro-cyan text-xs uppercase truncate font-mono group-hover:text-retro-accent">
                   {track.name}

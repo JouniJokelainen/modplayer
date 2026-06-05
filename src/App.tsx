@@ -98,7 +98,7 @@ export default function App() {
                       className={`w-full text-left px-2 py-1.5 text-xs uppercase tracking-wide font-mono flex items-center gap-1.5 transition-colors ${
                         active
                           ? 'text-retro-accent font-bold'
-                          : 'text-retro-text hover:text-retro-accent hover:bg-[#1e1e00]'
+                          : 'text-retro-text hover:text-retro-accent hover:bg-[#0a2a0a]'
                       }`}
                     >
                       <span className="w-3 shrink-0 font-bold">{active ? '>' : ''}</span>

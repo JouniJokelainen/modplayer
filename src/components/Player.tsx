@@ -10,7 +10,7 @@ interface Props {
 export function Player({ track, isPlaying, onToggle }: Props) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && e.target === document.body) {
+      if (e.code === 'Space' && e.target === document.body && !e.repeat) {
         e.preventDefault()
         onToggle()
       }
