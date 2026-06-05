@@ -2,6 +2,7 @@
 class Player {
   private ctx: AudioContext
   private gain: GainNode
+  private analyser: AnalyserNode
   private workletReady: Promise<void>
   private processNode: AudioWorkletNode | null = null
   private _playing = false
@@ -10,8 +11,17 @@ class Player {
   constructor() {
     this.ctx = new AudioContext()
     this.gain = this.ctx.createGain()
-    this.gain.connect(this.ctx.destination)
+    // Tap the signal for the spectrum visualizer: processNode -> gain -> analyser -> output
+    this.analyser = this.ctx.createAnalyser()
+    this.analyser.fftSize = 128
+    this.analyser.smoothingTimeConstant = 0.75
+    this.gain.connect(this.analyser)
+    this.analyser.connect(this.ctx.destination)
     this.workletReady = this.ctx.audioWorklet.addModule('/chiptune3.worklet.js')
+  }
+
+  getAnalyser(): AnalyserNode {
+    return this.analyser
   }
 
   async load(url: string): Promise<void> {
@@ -79,4 +89,10 @@ export function pause(): void {
 
 export function isPlaying(): boolean {
   return player?.isPlaying() ?? false
+}
+
+// Returns the analyser node for the spectrum visualizer, or null before the
+// first track has been loaded (the audio graph is created lazily).
+export function getAnalyser(): AnalyserNode | null {
+  return player?.getAnalyser() ?? null
 }

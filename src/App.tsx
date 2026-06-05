@@ -6,6 +6,7 @@ import { SearchBar } from './components/SearchBar'
 import { TrackList } from './components/TrackList'
 import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
+import { SpectrumBars } from './components/SpectrumBars'
 
 export default function App() {
   const [creatorSearch, setCreatorSearch] = useState('')
@@ -135,38 +136,43 @@ export default function App() {
                 />
               </div>
               <div
-                className="flex-1 overflow-y-auto"
+                className="flex-1 flex flex-col overflow-hidden"
                 style={{
                   backgroundImage: 'url(/16-bit_memories.jpg)',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  backgroundAttachment: 'local',
                 }}
               >
-                {loadingTracks ? (
-                  <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
-                ) : (
-                  <TrackList
-                    tracks={filteredTracks}
-                    creator={selectedCreator}
-                    currentUrl={currentTrack?.url ?? null}
-                    onPlay={handlePlayTrack}
-                  />
-                )}
+                <SpectrumBars />
+                <div className="flex-1 overflow-y-auto">
+                  {loadingTracks ? (
+                    <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
+                  ) : (
+                    <TrackList
+                      tracks={filteredTracks}
+                      creator={selectedCreator}
+                      currentUrl={currentTrack?.url ?? null}
+                      onPlay={handlePlayTrack}
+                    />
+                  )}
+                </div>
               </div>
             </>
           ) : (
             <div
-              className="flex-1 flex items-end justify-center pb-4"
+              className="flex-1 flex flex-col"
               style={{
                 backgroundImage: 'url(/16-bit_memories.jpg)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              <span className="text-retro-muted text-xs uppercase tracking-widest" style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 12px' }}>
-                SELECT AN ARTIST
-              </span>
+              <SpectrumBars />
+              <div className="flex-1 flex items-end justify-center pb-4">
+                <span className="text-retro-muted text-xs uppercase tracking-widest" style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 12px' }}>
+                  SELECT AN ARTIST
+                </span>
+              </div>
             </div>
           )}
         </main>
