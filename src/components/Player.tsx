@@ -10,9 +10,12 @@ interface Props {
 export function Player({ track, isPlaying, onToggle }: Props) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && e.target === document.body && !e.repeat) {
-        e.preventDefault()
-        onToggle()
+      if (e.code === 'Space' && !e.repeat) {
+        const tag = (e.target as HTMLElement).tagName
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault()
+          onToggle()
+        }
       }
     }
     document.addEventListener('keydown', handler)
