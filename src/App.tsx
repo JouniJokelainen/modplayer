@@ -143,7 +143,6 @@ export default function App() {
                   backgroundPosition: 'center',
                 }}
               >
-                <SpectrumBars />
                 <div className="flex-1 overflow-y-auto">
                   {loadingTracks ? (
                     <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
@@ -156,6 +155,7 @@ export default function App() {
                     />
                   )}
                 </div>
+                <SpectrumBars />
               </div>
             </>
           ) : (
@@ -167,12 +167,12 @@ export default function App() {
                 backgroundPosition: 'center',
               }}
             >
-              <SpectrumBars />
-              <div className="flex-1 flex items-end justify-center pb-4">
+              <div className="flex-1 flex items-center justify-center">
                 <span className="text-retro-muted text-xs uppercase tracking-widest" style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 12px' }}>
                   SELECT AN ARTIST
                 </span>
               </div>
+              <SpectrumBars />
             </div>
           )}
         </main>

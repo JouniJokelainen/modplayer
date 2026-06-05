@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { getAnalyser } from '../audio/audioEngine'
 
-const BAR_COUNT = 12
+const BAR_COUNT = 4
+// Bar width is sized as if this many bars spanned the full width, so the 4
+// visible bars keep the same width as the original 12-bar layout.
+const SLOT_COUNT = 12
 // Lower/mid frequency bins carry most of the energy in MOD music; ignore the
 // quiet high end so the bars stay lively.
 const USABLE_BINS = 28
@@ -36,8 +39,11 @@ export function SpectrumBars() {
       }
 
       const gap = Math.max(2, w * 0.012)
-      const barW = (w - gap * (BAR_COUNT - 1)) / BAR_COUNT
+      const barW = (w - gap * (SLOT_COUNT - 1)) / SLOT_COUNT
       const maxH = h - 2
+      // Center the group of bars horizontally.
+      const groupW = BAR_COUNT * barW + (BAR_COUNT - 1) * gap
+      const startX = (w - groupW) / 2
 
       for (let i = 0; i < BAR_COUNT; i++) {
         let target = 0
@@ -56,7 +62,7 @@ export function SpectrumBars() {
         levels.current[i] = target > cur ? cur + (target - cur) * 0.6 : cur + (target - cur) * 0.12
 
         const barH = Math.max(3, levels.current[i] * maxH)
-        const x = i * (barW + gap)
+        const x = startX + i * (barW + gap)
 
         // Gradient anchored to the full bar height: short bars read green,
         // tall bars climb through yellow into red (as in the reference).
@@ -76,7 +82,7 @@ export function SpectrumBars() {
   }, [])
 
   return (
-    <div className="h-20 shrink-0 px-3 pt-3 pointer-events-none">
+    <div className="h-40 shrink-0 px-3 pb-3 pointer-events-none">
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   )
