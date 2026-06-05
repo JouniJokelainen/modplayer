@@ -181,11 +181,7 @@ export default function App() {
                 backgroundPosition: 'center',
               }}
             >
-              <div className="flex-1 flex items-center justify-center">
-                <span className="text-retro-muted text-xs uppercase tracking-widest" style={{ background: 'rgba(0,0,0,0.6)', padding: '2px 12px' }}>
-                  SELECT AN ARTIST
-                </span>
-              </div>
+              <div className="flex-1" />
               <SpectrumBars />
             </div>
           )}
