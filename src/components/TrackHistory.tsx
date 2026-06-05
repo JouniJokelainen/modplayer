@@ -9,7 +9,7 @@ export function TrackHistory({ history, onPlay }: Props) {
   return (
     <div className="border border-retro-border bg-retro-dark">
       <div className="px-2 py-1 border-b border-retro-border bg-retro-panel">
-        <span className="text-retro-muted text-xs uppercase tracking-widest">RECENTLY PLAYED</span>
+        <span className="text-retro-text text-xs uppercase tracking-widest">RECENTLY PLAYED</span>
       </div>
       {history.length === 0 ? (
         <p className="text-retro-muted text-xs uppercase px-2 py-2">NO HISTORY YET.</p>

@@ -72,7 +72,7 @@ export default function App() {
         {/* Creator sidebar */}
         <aside className="w-56 border-r border-retro-border flex flex-col overflow-hidden bg-retro-panel shrink-0">
           <div className="px-2 py-1 border-b border-retro-border">
-            <span className="text-retro-muted text-xs uppercase tracking-widest">ARTISTS</span>
+            <span className="text-retro-text text-xs uppercase tracking-widest">ARTISTS</span>
           </div>
           <div className="p-2 border-b border-retro-border">
             <SearchBar
@@ -118,7 +118,7 @@ export default function App() {
         {/* Track list */}
         <main className="flex-1 flex flex-col overflow-hidden">
           <div className="px-2 py-1 border-b border-retro-border bg-retro-panel flex items-center justify-between shrink-0">
-            <span className="text-retro-muted text-xs uppercase tracking-widest">
+            <span className="text-retro-text text-xs uppercase tracking-widest">
               {selectedCreator ? `TRACKS / ${selectedCreator.toUpperCase()}` : 'TRACKS'}
             </span>
             {!loadingTracks && selectedCreator && (

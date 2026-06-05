@@ -25,7 +25,7 @@ export function Player({ track, isPlaying, onToggle }: Props) {
   return (
     <div className="border border-retro-border bg-retro-dark">
       <div className="px-2 py-1 border-b border-retro-border bg-retro-panel">
-        <span className="text-retro-muted text-xs uppercase tracking-widest">PLAYER</span>
+        <span className="text-retro-text text-xs uppercase tracking-widest">PLAYER</span>
       </div>
 
       <div className="p-2 space-y-1.5">

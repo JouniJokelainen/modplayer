@@ -13,7 +13,7 @@ export default {
           'accent-dim': '#228b22',
           cyan: '#00aaff',
           text: '#dddddd',
-          muted: '#666666',
+          muted: '#999999',
           active: '#0a2a0a',
         },
       },
