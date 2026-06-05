@@ -38,11 +38,14 @@ export function SpectrumBars() {
         analyser.getByteFrequencyData(data)
       }
 
-      const gap = Math.max(2, w * 0.012)
-      const barW = (w - gap * (SLOT_COUNT - 1)) / SLOT_COUNT
+      // slotGap sizes barW (as if 12 bars spanned the width) so bar width is
+      // preserved; barGap is the doubled free space drawn between the 4 bars.
+      const slotGap = Math.max(2, w * 0.012)
+      const barW = (w - slotGap * (SLOT_COUNT - 1)) / SLOT_COUNT
+      const barGap = slotGap * 2
       const maxH = h - 2
       // Center the group of bars horizontally.
-      const groupW = BAR_COUNT * barW + (BAR_COUNT - 1) * gap
+      const groupW = BAR_COUNT * barW + (BAR_COUNT - 1) * barGap
       const startX = (w - groupW) / 2
 
       for (let i = 0; i < BAR_COUNT; i++) {
@@ -62,7 +65,7 @@ export function SpectrumBars() {
         levels.current[i] = target > cur ? cur + (target - cur) * 0.6 : cur + (target - cur) * 0.12
 
         const barH = Math.max(3, levels.current[i] * maxH)
-        const x = startX + i * (barW + gap)
+        const x = startX + i * (barW + barGap)
 
         // Gradient anchored to the full bar height: short bars read green,
         // tall bars climb through yellow into red (as in the reference).
@@ -82,7 +85,7 @@ export function SpectrumBars() {
   }, [])
 
   return (
-    <div className="h-40 shrink-0 px-3 pb-3 pointer-events-none">
+    <div className="h-80 shrink-0 px-3 pb-3 pointer-events-none">
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   )
