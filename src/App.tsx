@@ -80,10 +80,20 @@ export default function App() {
   return (
     <div className="h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
       {/* Header */}
-      <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center shrink-0">
-        <span className="text-retro-accent uppercase tracking-widest font-bold" style={{ fontSize: '24px' }}>
+      <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center gap-4 shrink-0 overflow-hidden">
+        <span className="text-retro-accent uppercase tracking-widest font-bold shrink-0" style={{ fontSize: '24px' }}>
           MODPLAYER
         </span>
+        {currentTrack && (
+          <div className="marquee flex-1 overflow-hidden">
+            <span
+              className="marquee-text uppercase tracking-widest font-bold"
+              style={{ fontSize: '24px', animationPlayState: isPlaying ? 'running' : 'paused' }}
+            >
+              {currentTrack.creator} — {currentTrack.name}
+            </span>
+          </div>
+        )}
       </header>
 
       <div className="flex flex-1 overflow-hidden">

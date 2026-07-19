@@ -31,3 +31,46 @@
     color: #111;
   }
 }
+
+/* Scrolling track-name marquee in the header. The text slides right-to-left;
+   a mask fades it in (dim) on the right, brightens it in the middle, and fades
+   it to nothing before the MODPLAYER logo on the left. */
+.marquee {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 45%,
+    rgba(0, 0, 0, 1) 55%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 45%,
+    rgba(0, 0, 0, 1) 55%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  /* Start the text off the right edge regardless of its length. */
+  padding-left: 100%;
+  animation: marquee-scroll 14s linear infinite;
+  /* 80's neon: hot-pink-to-cyan gradient fill with a magenta glow. */
+  background: linear-gradient(90deg, #ff2e97, #00e5ff, #ff2e97);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 5px rgba(255, 46, 151, 0.6)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.4));
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
