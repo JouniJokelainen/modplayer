@@ -1,13 +1,14 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useCreators, useTracks } from './hooks/useModland'
 import { usePlaybackStore, Track } from './store/playback'
-import { loadMod, play, pause, isPlaying as engineIsPlaying } from './audio/audioEngine'
+import { loadMod, play, pause, isPlaying as engineIsPlaying, setVolume as engineSetVolume } from './audio/audioEngine'
 import { SearchBar } from './components/SearchBar'
 import { TrackList } from './components/TrackList'
 import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
 import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
+import { VolumeSlider } from './components/VolumeSlider'
 import { MAX_FAVOURITES } from './store/playback'
 
 export default function App() {
@@ -15,8 +16,13 @@ export default function App() {
   const [selectedCreator, setSelectedCreator] = useState<string | null>(null)
   const [trackSearch, setTrackSearch] = useState('')
 
-  const { currentTrack, isPlaying, history, favourites, setCurrentTrack, setIsPlaying, toggleFavourite } =
+  const { currentTrack, isPlaying, history, favourites, volume, setCurrentTrack, setIsPlaying, toggleFavourite, setVolume } =
     usePlaybackStore()
+
+  // Keep the audio engine's gain in sync with the stored volume.
+  useEffect(() => {
+    engineSetVolume(volume)
+  }, [volume])
 
   const { data: creators = [], isLoading: loadingCreators } = useCreators()
   const { data: tracks = [], isLoading: loadingTracks } = useTracks(selectedCreator)
@@ -204,6 +210,8 @@ export default function App() {
           </div>
         </aside>
       </div>
+
+      <VolumeSlider volume={volume} onChange={setVolume} />
     </div>
   )
 }

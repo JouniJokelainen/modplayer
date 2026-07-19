@@ -66,6 +66,10 @@ class Player {
   isPlaying(): boolean {
     return this._playing
   }
+
+  setVolume(v: number): void {
+    this.gain.gain.value = v
+  }
 }
 
 let player: Player | null = null
@@ -89,6 +93,12 @@ export function pause(): void {
 
 export function isPlaying(): boolean {
   return player?.isPlaying() ?? false
+}
+
+// Set output volume (0..1). Creates the audio graph if needed so the level
+// sticks for the next track that loads.
+export function setVolume(v: number): void {
+  getPlayer().setVolume(v)
 }
 
 // Returns the analyser node for the spectrum visualizer, or null before the

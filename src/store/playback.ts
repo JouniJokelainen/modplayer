@@ -14,9 +14,11 @@ interface PlaybackState {
   isPlaying: boolean
   history: Track[]
   favourites: Track[]
+  volume: number
   setCurrentTrack: (track: Track) => void
   setIsPlaying: (playing: boolean) => void
   toggleFavourite: (track: Track) => void
+  setVolume: (volume: number) => void
 }
 
 export const usePlaybackStore = create<PlaybackState>()(
@@ -26,6 +28,7 @@ export const usePlaybackStore = create<PlaybackState>()(
       isPlaying: false,
       history: [],
       favourites: [],
+      volume: 1,
       setCurrentTrack: (track) =>
         set((state) => ({
           currentTrack: track,
@@ -42,11 +45,12 @@ export const usePlaybackStore = create<PlaybackState>()(
           if (state.favourites.length >= MAX_FAVOURITES) return state
           return { favourites: [...state.favourites, track] }
         }),
+      setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
     }),
     {
       name: 'modplayer-favourites',
-      // Persist only favourites; playback state stays fresh on each load.
-      partialize: (state) => ({ favourites: state.favourites }),
+      // Persist favourites and volume; playback state stays fresh on each load.
+      partialize: (state) => ({ favourites: state.favourites, volume: state.volume }),
     }
   )
 )
