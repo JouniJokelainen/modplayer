@@ -1,4 +1,5 @@
 import { Track } from '../store/playback'
+import { DownloadLink } from './DownloadLink'
 
 interface Props {
   favourites: Track[]
@@ -28,6 +29,7 @@ export function Favourites({ favourites, onPlay, onRemove }: Props) {
                   </p>
                   <p className="text-retro-muted text-xs uppercase truncate font-mono">{track.creator}</p>
                 </button>
+                <DownloadLink url={track.url} name={track.name} />
                 <button
                   onClick={() => onRemove(track)}
                   title="Remove from favourites"

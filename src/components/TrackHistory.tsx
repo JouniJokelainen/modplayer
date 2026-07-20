@@ -1,4 +1,5 @@
 import { Track } from '../store/playback'
+import { DownloadLink } from './DownloadLink'
 
 interface Props {
   history: Track[]
@@ -17,15 +18,18 @@ export function TrackHistory({ history, onPlay }: Props) {
         <ul>
           {history.map((track, i) => (
             <li key={track.url} className={i < history.length - 1 ? 'border-b border-retro-border' : ''}>
-              <button
-                onClick={() => onPlay(track)}
-                className="w-full text-left px-2 py-1.5 hover:bg-[#0a2a0a] group"
-              >
-                <p className="text-retro-cyan text-xs uppercase truncate font-mono group-hover:text-retro-accent">
-                  {track.name}
-                </p>
-                <p className="text-retro-muted text-xs uppercase truncate font-mono">{track.creator}</p>
-              </button>
+              <div className="flex items-center group">
+                <button
+                  onClick={() => onPlay(track)}
+                  className="flex-1 min-w-0 text-left px-2 py-1.5 hover:bg-[#0a2a0a]"
+                >
+                  <p className="text-retro-cyan text-xs uppercase truncate font-mono group-hover:text-retro-accent">
+                    {track.name}
+                  </p>
+                  <p className="text-retro-muted text-xs uppercase truncate font-mono">{track.creator}</p>
+                </button>
+                <DownloadLink url={track.url} name={track.name} />
+              </div>
             </li>
           ))}
         </ul>
