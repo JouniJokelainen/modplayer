@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-
-const BASE = '/modland/pub/modules/Protracker'
+import { MODLAND_BASE as BASE } from '../modland'
 
 function parseLinks(html: string): string[] {
   const doc = new DOMParser().parseFromString(html, 'text/html')

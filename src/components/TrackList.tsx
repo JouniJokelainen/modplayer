@@ -1,4 +1,5 @@
 import { DownloadLink } from './DownloadLink'
+import { trackUrl } from '../modland'
 
 interface Props {
   tracks: string[]
@@ -26,7 +27,7 @@ export function TrackList({
   return (
     <ul>
       {tracks.map((name) => {
-        const url = `/modland/pub/modules/Protracker/${encodeURIComponent(creator)}/${encodeURIComponent(name)}`
+        const url = trackUrl(creator, name)
         const active = currentUrl === url
         const fav = favouriteUrls.has(url)
         const lockedOut = !fav && favouritesFull

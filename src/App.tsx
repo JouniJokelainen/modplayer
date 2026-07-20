@@ -10,6 +10,7 @@ import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
 import { VolumeSlider } from './components/VolumeSlider'
 import { LoadFile } from './components/LoadFile'
+import { trackUrl } from './modland'
 import { MAX_FAVOURITES } from './store/playback'
 
 export default function App() {
@@ -37,7 +38,7 @@ export default function App() {
 
   const handlePlayTrack = useCallback(async (name: string) => {
     if (!selectedCreator) return
-    const url = `/modland/pub/modules/Protracker/${encodeURIComponent(selectedCreator)}/${encodeURIComponent(name)}`
+    const url = trackUrl(selectedCreator, name)
     const track: Track = { creator: selectedCreator, name, url }
     try {
       await loadMod(url)
@@ -53,8 +54,7 @@ export default function App() {
 
   const handleToggleFavourite = useCallback((name: string) => {
     if (!selectedCreator) return
-    const url = `/modland/pub/modules/Protracker/${encodeURIComponent(selectedCreator)}/${encodeURIComponent(name)}`
-    toggleFavourite({ creator: selectedCreator, name, url })
+    toggleFavourite({ creator: selectedCreator, name, url: trackUrl(selectedCreator, name) })
   }, [selectedCreator, toggleFavourite])
 
   const handlePlayFromHistory = useCallback(async (track: Track) => {
@@ -181,7 +181,7 @@ export default function App() {
               <div
                 className="flex-1 flex flex-col overflow-hidden"
                 style={{
-                  backgroundImage: 'url(/16-bit_memories.jpg)',
+                  backgroundImage: `url(${import.meta.env.BASE_URL}16-bit_memories.jpg)`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
@@ -208,7 +208,7 @@ export default function App() {
             <div
               className="flex-1 flex flex-col"
               style={{
-                backgroundImage: 'url(/16-bit_memories.jpg)',
+                backgroundImage: `url(${import.meta.env.BASE_URL}16-bit_memories.jpg)`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}

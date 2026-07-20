@@ -17,7 +17,8 @@ class Player {
     this.analyser.smoothingTimeConstant = 0.75
     this.gain.connect(this.analyser)
     this.analyser.connect(this.ctx.destination)
-    this.workletReady = this.ctx.audioWorklet.addModule('/chiptune3.worklet.js')
+    // BASE_URL so the worklet resolves under the GitHub Pages sub-path too.
+    this.workletReady = this.ctx.audioWorklet.addModule(`${import.meta.env.BASE_URL}chiptune3.worklet.js`)
   }
 
   getAnalyser(): AnalyserNode {
