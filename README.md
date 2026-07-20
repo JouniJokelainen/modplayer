@@ -45,22 +45,18 @@ Open the URL Vite prints (default http://localhost:5173).
 | ----------------- | -------------------------------------------------------- |
 | `npm run dev`     | Start the Vite dev server with HMR                       |
 | `npm run build`   | Type-check (`tsc -b`) and build to `dist/`               |
-| `npm run preview` | Preview the production build locally                     |
-| `npm start`       | Serve `dist/` + modland proxy via Express (`server/proxy.cjs`) |
+| `npm run preview` | Preview the production build locally (served under `/modplayer/`) |
 
-## modland proxy
+## Deployment
 
-modland.com does not send CORS headers, so all requests are routed through a
-`/modland` proxy that rewrites to `https://modland.com`:
+modland.com sends `Access-Control-Allow-Origin: *`, so the browser fetches it
+directly and no proxy is needed. That lets the app run as a static site.
 
-- **Development** — handled by Vite's dev-server proxy (`vite.config.ts`).
-- **Production** — handled by the Express server in `server/proxy.cjs`, which
-  also serves the built `dist/`. Run it after `npm run build`:
-
-  ```bash
-  npm run build
-  npm start            # http://localhost:3000 (override with PORT)
-  ```
+It deploys to GitHub Pages via `.github/workflows/deploy.yml` on every push to
+`main`. Because the site lives at a sub-path, `vite.config.ts` sets
+`base: '/modplayer/'` for production builds only, so `npm run dev` stays at the
+root URL. Runtime asset paths (the worklet, background image) use
+`import.meta.env.BASE_URL` for the same reason.
 
 ## Project structure
 
@@ -68,9 +64,8 @@ modland.com does not send CORS headers, so all requests are routed through a
 public/
   chiptune3.worklet.js      # AudioWorklet glue (served at runtime)
   libopenmpt.worklet.js     # libopenmpt MOD decoder worklet
-server/
-  proxy.cjs                 # Production: static dist + /modland proxy
 src/
+  modland.ts                # modland base URL + track URL builder
   audio/audioEngine.ts      # Web Audio graph, playback, AnalyserNode for the visualizer
   hooks/useModland.ts       # TanStack Query hooks: useCreators(), useTracks()
   store/playback.ts         # Zustand store: current track, isPlaying, history
