@@ -18,8 +18,16 @@ export function Player({ track, isPlaying, onToggle }: Props) {
         }
       }
     }
+    const contextHandler = (e: MouseEvent) => {
+      e.preventDefault()
+      onToggle()
+    }
     document.addEventListener('keydown', handler)
-    return () => document.removeEventListener('keydown', handler)
+    document.addEventListener('contextmenu', contextHandler)
+    return () => {
+      document.removeEventListener('keydown', handler)
+      document.removeEventListener('contextmenu', contextHandler)
+    }
   }, [onToggle])
 
   return (
@@ -63,7 +71,7 @@ export function Player({ track, isPlaying, onToggle }: Props) {
         >
           {isPlaying ? '[ PAUSE ]' : '[ PLAY ]'}
         </button>
-        <p className="text-retro-muted text-xs text-center mt-1 uppercase tracking-widest">SPACE TO TOGGLE</p>
+        <p className="text-retro-muted text-xs text-center mt-1 uppercase tracking-widest">SPACE OR RIGHT-CLICK TO TOGGLE</p>
       </div>
     </div>
   )
