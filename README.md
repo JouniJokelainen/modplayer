@@ -12,10 +12,14 @@ browser via an `AudioWorklet`, and renders a real-time spectrum visualizer.
 - **Artist browser** — the full ProTracker artist index from modland.com, with a live filter.
 - **Track list** — `.mod` files for the selected artist, filterable by name.
 - **Playback** — click a track to stream and play it; play/pause toggle in the player panel.
-- **Spacebar to toggle** — pause/resume from anywhere except text inputs (ignores key repeat).
+- **Spacebar or right-click to toggle** — pause/resume from anywhere; spacebar ignores text inputs and key repeat.
+- **Load a local file** — play a `.mod` from your own machine via `[ LOAD .MOD FILE ]` in the header.
+- **Download** — save any `.mod` locally from the download icon in the track list, recently played, and favourites.
 - **Recently played** — the last 3 tracks, click to replay.
+- **Favourites** — star up to 5 tracks; persisted to `localStorage`.
+- **Volume** — vertical slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
 - **Spectrum visualizer** — 4 chunky bars (green → yellow → red) centered along the bottom, driven by a Web Audio `AnalyserNode`. Fades to a flat baseline when idle.
-- **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop.
+- **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop, with the current track scrolling across the header.
 
 ## Tech stack
 
@@ -68,12 +72,16 @@ src/
   modland.ts                # modland base URL + track URL builder
   audio/audioEngine.ts      # Web Audio graph, playback, AnalyserNode for the visualizer
   hooks/useModland.ts       # TanStack Query hooks: useCreators(), useTracks()
-  store/playback.ts         # Zustand store: current track, isPlaying, history
+  store/playback.ts         # Zustand store: current track, isPlaying, history, favourites, volume
   components/
     SearchBar.tsx           # Filter input
     TrackList.tsx           # Track rows for the selected artist
-    Player.tsx              # Player panel + spacebar handler
+    Player.tsx              # Player panel + spacebar and right-click handlers
     TrackHistory.tsx        # Recently played list
+    Favourites.tsx          # Starred tracks list
+    DownloadLink.tsx        # Download icon (fetches to a blob; cross-origin safe)
+    LoadFile.tsx            # Load a .mod from the local machine
+    VolumeSlider.tsx        # Vertical volume slider (drag or wheel)
     SpectrumBars.tsx        # Canvas spectrum visualizer
   App.tsx                   # Layout: artists | tracks | player
   index.css                 # Tailwind layers + base theme

@@ -31,7 +31,14 @@
       "Skill(claude-in-chrome)",
       "Bash(curl -sL -o public/favicon.png \"https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_120/https%3A%2F%2Fdashboard.snapcraft.io%2Fsite_media%2Fappmedia%2F2019%2F07%2Ficon_lqI79cK.png\")",
       "Bash(curl -sI -H \"Origin: https://example.github.io\" \"https://modland.com/pub/modules/Protracker/\")",
-      "Bash(grep -rn \"'/modland\\\\|url\\(/\\\\|addModule\\('/\" src/)"
+      "Bash(grep -rn \"'/modland\\\\|url\\(/\\\\|addModule\\('/\" src/)",
+      "Bash(pkill -f \"vite preview\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh run *)",
+      "Bash(git rm *)",
+      "Bash(git commit -q -m ' *)"
     ]
   }
 }
