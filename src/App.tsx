@@ -9,6 +9,7 @@ import { TrackHistory } from './components/TrackHistory'
 import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
 import { VolumeSlider } from './components/VolumeSlider'
+import { LoadFile } from './components/LoadFile'
 import { MAX_FAVOURITES } from './store/playback'
 
 export default function App() {
@@ -67,6 +68,20 @@ export default function App() {
     }
   }, [setCurrentTrack, setIsPlaying])
 
+  // Local files play from a blob URL, so the engine's fetch path works unchanged.
+  const handleLoadLocalFile = useCallback(async (file: File) => {
+    const url = URL.createObjectURL(file)
+    const track: Track = { creator: 'LOCAL FILE', name: file.name, url }
+    try {
+      await loadMod(url)
+      setCurrentTrack(track)
+      play()
+      setIsPlaying(true)
+    } catch (err) {
+      console.error('Failed to load track', err)
+    }
+  }, [setCurrentTrack, setIsPlaying])
+
   const handleToggle = useCallback(() => {
     if (engineIsPlaying()) {
       pause()
@@ -84,6 +99,7 @@ export default function App() {
         <span className="text-retro-accent uppercase tracking-widest font-bold shrink-0" style={{ fontSize: '24px' }}>
           MODPLAYER
         </span>
+        <LoadFile onLoad={handleLoadLocalFile} />
         {currentTrack && (
           <div className="marquee flex-1 overflow-hidden">
             <span
