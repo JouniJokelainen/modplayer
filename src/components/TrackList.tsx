@@ -44,6 +44,14 @@ export function TrackList({
                 </span>
                 <span className="truncate">{name}</span>
               </button>
+              <a
+                href={url}
+                download={name}
+                title="Download .mod file"
+                className="shrink-0 px-2 py-1.5 text-sm text-retro-muted hover:text-retro-accent transition-colors"
+              >
+                ⤓
+              </a>
               <button
                 onClick={() => onToggleFavourite(name)}
                 disabled={lockedOut}
