@@ -5,7 +5,7 @@ interface Props {
 export function LoadFile({ onLoad }: Props) {
   return (
     <label className="shrink-0 px-2 py-1 text-xs uppercase tracking-widest font-mono font-bold border border-retro-accent text-retro-accent hover:bg-retro-active cursor-pointer transition-colors">
-      [ LOAD FILE ]
+      [ LOAD .MOD FILE ]
       <input
         type="file"
         accept=".mod"
