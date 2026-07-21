@@ -8,6 +8,7 @@ import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
 import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
+import { Backdrop } from './components/Backdrop'
 import { VolumeSlider } from './components/VolumeSlider'
 import { LoadFile } from './components/LoadFile'
 import { trackUrl } from './modland'
@@ -178,14 +179,7 @@ export default function App() {
                   placeholder="Filter tracks..."
                 />
               </div>
-              <div
-                className="flex-1 flex flex-col overflow-hidden"
-                style={{
-                  backgroundImage: `url(${import.meta.env.BASE_URL}16-bit_memories.jpg)`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
+              <Backdrop>
                 <div className="flex-1 overflow-y-auto">
                   {loadingTracks ? (
                     <p className="text-retro-muted text-xs uppercase px-2 py-2">LOADING TRACKS...</p>
@@ -202,20 +196,13 @@ export default function App() {
                   )}
                 </div>
                 <SpectrumBars />
-              </div>
+              </Backdrop>
             </>
           ) : (
-            <div
-              className="flex-1 flex flex-col"
-              style={{
-                backgroundImage: `url(${import.meta.env.BASE_URL}16-bit_memories.jpg)`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
+            <Backdrop>
               <div className="flex-1" />
               <SpectrumBars />
-            </div>
+            </Backdrop>
           )}
         </main>
 

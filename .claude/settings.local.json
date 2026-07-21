@@ -38,7 +38,18 @@
       "Bash(git push *)",
       "Bash(gh run *)",
       "Bash(git rm *)",
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(curl -s \"https://modland.com/pub/modules/Protracker/\" -o /tmp/idx.html -w \"index bytes: %{size_download}\\\\n\")",
+      "Read(//tmp/**)",
+      "Bash(curl -sI \"https://modland.com/allmods.zip\")",
+      "Bash(curl -s \"https://modland.com/pub/modules/Protracker/4-Mat/\" -w \"\\\\nartist page bytes: %{size_download}\\\\n\" -o /dev/null)",
+      "Bash(curl -s -H \"Accept-Encoding: gzip\" -D - \"https://modland.com/pub/modules/Protracker/\" -o /tmp/idx.gz -w \"\\\\ngz bytes: %{size_download}\\\\n\")",
+      "Bash(python *)",
+      "Bash(curl -s https://modland.com/pub/modules/Protracker/ -o C:/Users/Jouni/AppData/Local/Temp/claude/C--Users-Jouni-claude-modplayer/591aa194-c0ab-4694-a23f-42d56d1b3791/scratchpad/idx.html)",
+      "Bash(curl -s -H 'Accept-Encoding: gzip' https://modland.com/pub/modules/Protracker/ -o C:/Users/Jouni/AppData/Local/Temp/claude/C--Users-Jouni-claude-modplayer/591aa194-c0ab-4694-a23f-42d56d1b3791/scratchpad/idx.gz -w 'index gzipped transfer: %{size_download} bytes\\\\n')",
+      "Bash(curl -s -H \"Accept-Encoding: gzip\" \"https://modland.com/pub/modules/Protracker/4-Mat/\" -o /dev/null -w \"artist page gzipped: %{size_download} bytes\\\\n\")",
+      "Bash(curl -s https://modland.com/allmods.zip -o C:/Users/Jouni/AppData/Local/Temp/claude/C--Users-Jouni-claude-modplayer/591aa194-c0ab-4694-a23f-42d56d1b3791/scratchpad/allmods.zip -w 'downloaded %{size_download}\\\\n')",
+      "Bash(git check-ignore *)"
     ]
   }
 }
