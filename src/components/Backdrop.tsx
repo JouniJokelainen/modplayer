@@ -21,7 +21,7 @@ export function Backdrop({ children }: { children: ReactNode }) {
         rel="noreferrer"
         className="absolute bottom-1 left-2 text-xs text-retro-muted hover:text-retro-accent transition-colors"
       >
-        Toni Bratincevic — interstation3d.com
+        Toni Bratincevic
       </a>
     </div>
   )
