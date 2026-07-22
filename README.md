@@ -17,7 +17,7 @@ browser via an `AudioWorklet`, and renders a real-time spectrum visualizer.
 - **Download** — save any `.mod` locally from the download icon in the track list, recently played, and favourites.
 - **Recently played** — the last 3 tracks, click to replay.
 - **Favourites** — star up to 5 tracks; persisted to `localStorage`.
-- **Volume** — vertical slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
+- **Volume** — horizontal slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
 - **Spectrum visualizer** — 4 chunky bars (green → yellow → red) centered along the bottom, driven by a Web Audio `AnalyserNode`. Fades to a flat baseline when idle.
 - **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop, with the current track scrolling across the header.
 
@@ -81,7 +81,7 @@ src/
     Favourites.tsx          # Starred tracks list
     DownloadLink.tsx        # Download icon (fetches to a blob; cross-origin safe)
     LoadFile.tsx            # Load a .mod from the local machine
-    VolumeSlider.tsx        # Vertical volume slider (drag or wheel)
+    VolumeSlider.tsx        # Horizontal volume slider (drag or wheel)
     SpectrumBars.tsx        # Canvas spectrum visualizer
   App.tsx                   # Layout: artists | tracks | player
   index.css                 # Tailwind layers + base theme

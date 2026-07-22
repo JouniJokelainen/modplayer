@@ -8,8 +8,8 @@ import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
 import { Favourites } from './components/Favourites'
 import { SpectrumBars } from './components/SpectrumBars'
-import { Backdrop } from './components/Backdrop'
 import { VolumeSlider } from './components/VolumeSlider'
+import { Backdrop } from './components/Backdrop'
 import { LoadFile } from './components/LoadFile'
 import { trackUrl } from './modland'
 import { MAX_FAVOURITES } from './store/playback'
@@ -211,15 +211,20 @@ export default function App() {
           <div className="p-2 border-b border-retro-border">
             <Player track={currentTrack} isPlaying={isPlaying} onToggle={handleToggle} />
           </div>
-          <div className="p-2">
-            <TrackHistory history={history} onPlay={handlePlayFromHistory} />
-          </div>
-          <div className="px-2 pb-2">
-            <Favourites
-              favourites={favourites}
-              onPlay={handlePlayFromHistory}
-              onRemove={toggleFavourite}
-            />
+          {/* Scrolls when the lists outgrow a short screen, so nothing is
+              unreachable on a laptop. The bottom padding keeps the last row clear
+              of the volume slider floating over this corner. */}
+          <div className="flex-1 min-h-0 overflow-y-auto pb-14">
+            <div className="p-2">
+              <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+            </div>
+            <div className="px-2 pb-2">
+              <Favourites
+                favourites={favourites}
+                onPlay={handlePlayFromHistory}
+                onRemove={toggleFavourite}
+              />
+            </div>
           </div>
         </aside>
       </div>
