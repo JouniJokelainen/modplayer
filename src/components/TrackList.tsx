@@ -1,5 +1,6 @@
 import { DownloadLink } from './DownloadLink'
 import { TrackEntry } from '../hooks/useModland'
+import { MAX_FAVOURITES } from '../store/playback'
 
 interface Props {
   tracks: TrackEntry[]
@@ -53,7 +54,7 @@ export function TrackList({
                   fav
                     ? 'Remove from favourites'
                     : lockedOut
-                    ? 'Favourites full (max 5)'
+                    ? `Favourites full (max ${MAX_FAVOURITES})`
                     : 'Add to favourites'
                 }
                 className={`shrink-0 px-2 py-1.5 text-sm transition-colors ${

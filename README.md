@@ -15,8 +15,8 @@ an `AudioWorklet`, and renders a real-time spectrum visualizer.
 - **Spacebar or right-click to toggle** — pause/resume from anywhere; spacebar ignores text inputs and key repeat.
 - **Load a local file** — play a `.mod` or `.xm` from your own machine via `[ LOAD MODULE FILE ]` in the header.
 - **Download** — save any track locally from the download icon in the track list, recently played, and favourites.
-- **Recently played** — the last 3 tracks, click to replay.
-- **Favourites** — star up to 5 tracks; persisted to `localStorage`.
+- **Recently played** — the last 2 tracks, click to replay.
+- **Favourites** — star up to 7 tracks; persisted to `localStorage`.
 - **Volume** — horizontal slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
 - **Spectrum visualizer** — 4 chunky bars (green → yellow → red) centered along the bottom, driven by a Web Audio `AnalyserNode`. Fades to a flat baseline when idle.
 - **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop, with the current track scrolling across the header.

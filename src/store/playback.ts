@@ -7,7 +7,7 @@ export interface Track {
   url: string
 }
 
-export const MAX_FAVOURITES = 5
+export const MAX_FAVOURITES = 7
 
 interface PlaybackState {
   currentTrack: Track | null
@@ -32,7 +32,7 @@ export const usePlaybackStore = create<PlaybackState>()(
       setCurrentTrack: (track) =>
         set((state) => ({
           currentTrack: track,
-          history: [track, ...state.history.filter((t) => t.url !== track.url)].slice(0, 3),
+          history: [track, ...state.history.filter((t) => t.url !== track.url)].slice(0, 2),
         })),
       setIsPlaying: (playing) => set({ isPlaying: playing }),
       toggleFavourite: (track) =>
