@@ -1,19 +1,17 @@
 import { DownloadLink } from './DownloadLink'
-import { trackUrl } from '../modland'
+import { TrackEntry } from '../hooks/useModland'
 
 interface Props {
-  tracks: string[]
-  creator: string
+  tracks: TrackEntry[]
   currentUrl: string | null
   favouriteUrls: Set<string>
   favouritesFull: boolean
-  onPlay: (name: string) => void
-  onToggleFavourite: (name: string) => void
+  onPlay: (entry: TrackEntry) => void
+  onToggleFavourite: (entry: TrackEntry) => void
 }
 
 export function TrackList({
   tracks,
-  creator,
   currentUrl,
   favouriteUrls,
   favouritesFull,
@@ -26,16 +24,16 @@ export function TrackList({
 
   return (
     <ul>
-      {tracks.map((name) => {
-        const url = trackUrl(creator, name)
+      {tracks.map((entry) => {
+        const { name, url } = entry
         const active = currentUrl === url
         const fav = favouriteUrls.has(url)
         const lockedOut = !fav && favouritesFull
         return (
-          <li key={name} className={`border-b border-retro-border ${active ? 'bg-retro-active' : 'bg-black/70'}`}>
+          <li key={url} className={`border-b border-retro-border ${active ? 'bg-retro-active' : 'bg-black/70'}`}>
             <div className="flex items-center">
               <button
-                onClick={() => onPlay(name)}
+                onClick={() => onPlay(entry)}
                 className={`flex-1 min-w-0 text-left px-2 py-1.5 font-mono text-xs uppercase tracking-wide flex items-center gap-2 transition-colors ${
                   active
                     ? 'text-retro-accent font-bold'
@@ -49,7 +47,7 @@ export function TrackList({
               </button>
               <DownloadLink url={url} name={name} />
               <button
-                onClick={() => onToggleFavourite(name)}
+                onClick={() => onToggleFavourite(entry)}
                 disabled={lockedOut}
                 title={
                   fav

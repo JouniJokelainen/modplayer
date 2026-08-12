@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useCreators, useTracks } from './hooks/useModland'
+import { useCreators, useTracks, TrackEntry } from './hooks/useModland'
 import { usePlaybackStore, Track } from './store/playback'
 import { loadMod, play, pause, isPlaying as engineIsPlaying, setVolume as engineSetVolume } from './audio/audioEngine'
 import { SearchBar } from './components/SearchBar'
@@ -11,7 +11,6 @@ import { SpectrumBars } from './components/SpectrumBars'
 import { VolumeSlider } from './components/VolumeSlider'
 import { Backdrop } from './components/Backdrop'
 import { LoadFile } from './components/LoadFile'
-import { trackUrl } from './modland'
 import { MAX_FAVOURITES } from './store/playback'
 
 export default function App() {
@@ -34,15 +33,14 @@ export default function App() {
     c.toLowerCase().includes(creatorSearch.toLowerCase())
   )
   const filteredTracks = tracks.filter((t) =>
-    t.toLowerCase().includes(trackSearch.toLowerCase())
+    t.name.toLowerCase().includes(trackSearch.toLowerCase())
   )
 
-  const handlePlayTrack = useCallback(async (name: string) => {
+  const handlePlayTrack = useCallback(async (entry: TrackEntry) => {
     if (!selectedCreator) return
-    const url = trackUrl(selectedCreator, name)
-    const track: Track = { creator: selectedCreator, name, url }
+    const track: Track = { creator: selectedCreator, name: entry.name, url: entry.url }
     try {
-      await loadMod(url)
+      await loadMod(entry.url)
       setCurrentTrack(track)
       play()
       setIsPlaying(true)
@@ -53,9 +51,9 @@ export default function App() {
 
   const favouriteUrls = new Set(favourites.map((f) => f.url))
 
-  const handleToggleFavourite = useCallback((name: string) => {
+  const handleToggleFavourite = useCallback((entry: TrackEntry) => {
     if (!selectedCreator) return
-    toggleFavourite({ creator: selectedCreator, name, url: trackUrl(selectedCreator, name) })
+    toggleFavourite({ creator: selectedCreator, name: entry.name, url: entry.url })
   }, [selectedCreator, toggleFavourite])
 
   const handlePlayFromHistory = useCallback(async (track: Track) => {
@@ -186,7 +184,6 @@ export default function App() {
                   ) : (
                     <TrackList
                       tracks={filteredTracks}
-                      creator={selectedCreator}
                       currentUrl={currentTrack?.url ?? null}
                       favouriteUrls={favouriteUrls}
                       favouritesFull={favourites.length >= MAX_FAVOURITES}

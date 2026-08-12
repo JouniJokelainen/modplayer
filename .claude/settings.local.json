@@ -50,7 +50,11 @@
       "Bash(curl -s -H \"Accept-Encoding: gzip\" \"https://modland.com/pub/modules/Protracker/4-Mat/\" -o /dev/null -w \"artist page gzipped: %{size_download} bytes\\\\n\")",
       "Bash(curl -s https://modland.com/allmods.zip -o C:/Users/Jouni/AppData/Local/Temp/claude/C--Users-Jouni-claude-modplayer/591aa194-c0ab-4694-a23f-42d56d1b3791/scratchpad/allmods.zip -w 'downloaded %{size_download}\\\\n')",
       "Bash(git check-ignore *)",
-      "Bash(echo \"exit=$?\")"
+      "Bash(echo \"exit=$?\")",
+      "Bash(curl -s -o /dev/null -w \"modules root: %{http_code}\\\\n\" \"https://modland.com/pub/modules/Fasttracker%202/\")",
+      "Bash(curl -s \"https://modland.com/pub/modules/Fasttracker%202/\")",
+      "Bash(curl -s \"https://modland.com/pub/modules/Fasttracker%202/purple%20motion/\")",
+      "Bash(curl -s -I \"https://modland.com/pub/modules/Fasttracker%202/\")"
     ]
   }
 }
