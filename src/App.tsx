@@ -248,7 +248,13 @@ export default function App() {
               of the volume slider floating over this corner. */}
           <div className="flex-1 min-h-0 overflow-y-auto pb-14">
             <div className="p-2">
-              <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+              <TrackHistory
+                history={history}
+                favouriteUrls={favouriteUrls}
+                favouritesFull={favourites.length >= MAX_FAVOURITES}
+                onPlay={handlePlayFromHistory}
+                onToggleFavourite={toggleFavourite}
+              />
             </div>
             <div className="px-2 pb-2">
               <FavouritesPanel
