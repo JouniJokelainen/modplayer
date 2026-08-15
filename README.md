@@ -9,14 +9,14 @@ an `AudioWorklet`, and renders a real-time spectrum visualizer.
 
 ## Features
 
-- **Artist browser** — the union of the ProTracker and Fasttracker 2 artist indexes from modland.com, with a live filter.
+- **Artist browser** — the union of the ProTracker and Fasttracker 2 artist indexes from modland.com, with a live filter and a star to favourite each artist.
 - **Track list** — `.mod` and `.xm` files for the selected artist (merged from both format folders), filterable by name.
 - **Playback** — click a track to stream and play it; play/pause toggle in the player panel.
 - **Spacebar or right-click to toggle** — pause/resume from anywhere; spacebar ignores text inputs and key repeat.
 - **Load a local file** — play a `.mod` or `.xm` from your own machine via `[ LOAD MODULE FILE ]` in the header.
 - **Download** — save any track locally from the download icon in the track list, recently played, and favourites.
 - **Recently played** — the last 2 tracks, click to replay.
-- **Favourites** — star up to 7 tracks; persisted to `localStorage`.
+- **Favourites** — star up to 7 tracks and up to 7 artists; a **Songs / Artists** toggle in the panel flips between the two lists. Selecting a favourited artist opens their track list. Persisted to `localStorage`.
 - **Volume** — horizontal slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
 - **Spectrum visualizer** — 4 chunky bars (green → yellow → red) centered along the bottom, driven by a Web Audio `AnalyserNode`. Fades to a flat baseline when idle.
 - **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop, with the current track scrolling across the header.
@@ -72,13 +72,13 @@ src/
   modland.ts                # modland root URL, format folders (Protracker/Fasttracker 2) + track URL builder
   audio/audioEngine.ts      # Web Audio graph, playback, AnalyserNode for the visualizer
   hooks/useModland.ts       # TanStack Query hooks: useCreators(), useTracks()
-  store/playback.ts         # Zustand store: current track, isPlaying, history, favourites, volume
+  store/playback.ts         # Zustand store: current track, isPlaying, history, favourite songs + artists, volume
   components/
     SearchBar.tsx           # Filter input
     TrackList.tsx           # Track rows for the selected artist
     Player.tsx              # Player panel + spacebar and right-click handlers
     TrackHistory.tsx        # Recently played list
-    Favourites.tsx          # Starred tracks list
+    FavouritesPanel.tsx     # Starred songs + artists, with a Songs/Artists view toggle
     DownloadLink.tsx        # Download icon (fetches to a blob; cross-origin safe)
     LoadFile.tsx            # Load a .mod or .xm from the local machine
     VolumeSlider.tsx        # Horizontal volume slider (drag or wheel)
