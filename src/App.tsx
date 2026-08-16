@@ -6,12 +6,13 @@ import { SearchBar } from './components/SearchBar'
 import { TrackList } from './components/TrackList'
 import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
-import { FavouritesPanel, FavView } from './components/FavouritesPanel'
+import { FavouritesPanel, FavView, ImportStatus } from './components/FavouritesPanel'
 import { SpectrumBars } from './components/SpectrumBars'
 import { VolumeSlider } from './components/VolumeSlider'
 import { Backdrop } from './components/Backdrop'
 import { LoadFile } from './components/LoadFile'
 import { MAX_FAVOURITES, MAX_FAVOURITE_ARTISTS } from './store/playback'
+import { exportFavourites, parseFavouritesFile } from './favouritesFile'
 
 export default function App() {
   const [creatorSearch, setCreatorSearch] = useState('')
@@ -21,7 +22,7 @@ export default function App() {
 
   const {
     currentTrack, isPlaying, history, favourites, favouriteArtists, volume,
-    setCurrentTrack, setIsPlaying, toggleFavourite, toggleFavouriteArtist, setVolume,
+    setCurrentTrack, setIsPlaying, toggleFavourite, toggleFavouriteArtist, importFavourites, setVolume,
   } = usePlaybackStore()
 
   // Keep the audio engine's gain in sync with the stored volume.
@@ -77,6 +78,32 @@ export default function App() {
       console.error('Failed to load track', err)
     }
   }, [setCurrentTrack, setIsPlaying])
+
+  const handleExportFavourites = useCallback(() => {
+    exportFavourites(favourites, favouriteArtists)
+  }, [favourites, favouriteArtists])
+
+  const handleImportFavourites = useCallback(
+    async (file: File): Promise<ImportStatus> => {
+      try {
+        const { songs, artists } = parseFavouritesFile(await file.text())
+        const { addedSongs, addedArtists, skipped } = importFavourites(songs, artists)
+        if (addedSongs === 0 && addedArtists === 0) {
+          return skipped > 0
+            ? { tone: 'warn', message: 'NOTHING ADDED (DUPLICATES OR FULL)' }
+            : { tone: 'warn', message: 'NO FAVOURITES IN FILE' }
+        }
+        const parts: string[] = []
+        if (addedSongs > 0) parts.push(`${addedSongs} SONG${addedSongs === 1 ? '' : 'S'}`)
+        if (addedArtists > 0) parts.push(`${addedArtists} ARTIST${addedArtists === 1 ? '' : 'S'}`)
+        const suffix = skipped > 0 ? ` (${skipped} SKIPPED)` : ''
+        return { tone: skipped > 0 ? 'warn' : 'ok', message: `IMPORTED ${parts.join(', ')}${suffix}` }
+      } catch (err) {
+        return { tone: 'error', message: err instanceof Error ? err.message : 'IMPORT FAILED' }
+      }
+    },
+    [importFavourites]
+  )
 
   // Local files play from a blob URL, so the engine's fetch path works unchanged.
   const handleLoadLocalFile = useCallback(async (file: File) => {
@@ -266,6 +293,8 @@ export default function App() {
                 onRemoveSong={toggleFavourite}
                 onSelectArtist={handleSelectFavouriteArtist}
                 onRemoveArtist={toggleFavouriteArtist}
+                onExport={handleExportFavourites}
+                onImport={handleImportFavourites}
               />
             </div>
           </div>

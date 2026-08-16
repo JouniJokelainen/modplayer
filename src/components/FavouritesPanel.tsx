@@ -1,7 +1,13 @@
+import { useEffect, useRef, useState } from 'react'
 import { Track } from '../store/playback'
 import { DownloadLink } from './DownloadLink'
 
 export type FavView = 'songs' | 'artists'
+
+export interface ImportStatus {
+  tone: 'ok' | 'warn' | 'error'
+  message: string
+}
 
 interface Props {
   view: FavView
@@ -12,6 +18,8 @@ interface Props {
   onRemoveSong: (track: Track) => void
   onSelectArtist: (artist: string) => void
   onRemoveArtist: (artist: string) => void
+  onExport: () => void
+  onImport: (file: File) => Promise<ImportStatus>
 }
 
 export function FavouritesPanel({
@@ -23,19 +31,62 @@ export function FavouritesPanel({
   onRemoveSong,
   onSelectArtist,
   onRemoveArtist,
+  onExport,
+  onImport,
 }: Props) {
+  const [status, setStatus] = useState<ImportStatus | null>(null)
+  const clearTimer = useRef<ReturnType<typeof setTimeout>>()
+
+  // Show an import result briefly, then fade it out. A single shared timer is
+  // reset on each new result so rapid imports don't leave a stale message.
+  const flashStatus = (s: ImportStatus) => {
+    setStatus(s)
+    clearTimeout(clearTimer.current)
+    clearTimer.current = setTimeout(() => setStatus(null), 4000)
+  }
+  useEffect(() => () => clearTimeout(clearTimer.current), [])
+
+  const isEmpty = favourites.length === 0 && favouriteArtists.length === 0
+
   return (
     <div className="border border-retro-border bg-retro-dark">
-      {/* Header with a Songs / Artists segmented toggle */}
+      {/* Header with export/import actions and a Songs / Artists segmented toggle */}
       <div className="flex items-stretch border-b border-retro-border bg-retro-panel">
-        <span className="flex-1 px-2 py-1 self-center text-retro-text text-xs uppercase tracking-widest">
+        <span className="flex-1 min-w-0 truncate px-2 py-1 self-center text-retro-text text-xs uppercase tracking-normal">
           FAVOURITES
         </span>
+        <button
+          onClick={onExport}
+          disabled={isEmpty}
+          title={isEmpty ? 'No favourites to export' : 'Export favourites to a file'}
+          className={`shrink-0 px-1 self-center text-sm transition-colors ${
+            isEmpty ? 'text-retro-border cursor-not-allowed' : 'text-retro-muted hover:text-retro-accent'
+          }`}
+        >
+          ⤓
+        </button>
+        <label
+          title="Import favourites from a file"
+          className="shrink-0 px-1 self-center text-sm text-retro-muted hover:text-retro-accent cursor-pointer transition-colors"
+        >
+          ⤒
+          <input
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={async (e) => {
+              const file = e.target.files?.[0]
+              // Reset so re-picking the same file re-triggers onChange.
+              e.target.value = ''
+              if (file) flashStatus(await onImport(file))
+            }}
+          />
+        </label>
         {(['songs', 'artists'] as const).map((v) => (
           <button
             key={v}
             onClick={() => onSetView(v)}
-            className={`shrink-0 px-2 py-1 text-xs uppercase tracking-wide border-l border-retro-border transition-colors ${
+            className={`shrink-0 px-1.5 py-1 text-xs uppercase tracking-normal border-l border-retro-border transition-colors ${
               view === v
                 ? 'bg-retro-active text-retro-accent font-bold'
                 : 'text-retro-muted hover:text-retro-accent'
@@ -45,6 +96,21 @@ export function FavouritesPanel({
           </button>
         ))}
       </div>
+
+      {/* Transient feedback after an import (auto-clears). */}
+      {status && (
+        <p
+          className={`text-xs uppercase px-2 py-1 border-b border-retro-border truncate ${
+            status.tone === 'error'
+              ? 'text-red-400'
+              : status.tone === 'warn'
+              ? 'text-retro-muted'
+              : 'text-retro-accent'
+          }`}
+        >
+          {status.message}
+        </p>
+      )}
 
       {view === 'songs' ? (
         favourites.length === 0 ? (

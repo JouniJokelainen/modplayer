@@ -21,12 +21,22 @@ interface PlaybackState {
   setIsPlaying: (playing: boolean) => void
   toggleFavourite: (track: Track) => void
   toggleFavouriteArtist: (artist: string) => void
+  importFavourites: (songs: Track[], artists: string[]) => ImportResult
   setVolume: (volume: number) => void
+}
+
+// Counts returned by importFavourites so the UI can report what happened:
+// how many new songs/artists were added and how many incoming entries were
+// skipped (duplicates or dropped because a list was already at its cap).
+export interface ImportResult {
+  addedSongs: number
+  addedArtists: number
+  skipped: number
 }
 
 export const usePlaybackStore = create<PlaybackState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       currentTrack: null,
       isPlaying: false,
       history: [],
@@ -59,6 +69,39 @@ export const usePlaybackStore = create<PlaybackState>()(
           if (state.favouriteArtists.length >= MAX_FAVOURITE_ARTISTS) return state
           return { favouriteArtists: [...state.favouriteArtists, artist] }
         }),
+      importFavourites: (songs, artists) => {
+        const state = get()
+        // Merge into the existing lists: skip duplicates (songs by url, artists
+        // by name) and stop adding once a list reaches its cap. Anything not
+        // added — duplicate or overflow — counts as skipped.
+        const mergedSongs = [...state.favourites]
+        let addedSongs = 0
+        let skipped = 0
+        for (const song of songs) {
+          if (mergedSongs.some((f) => f.url === song.url)) {
+            skipped++
+          } else if (mergedSongs.length >= MAX_FAVOURITES) {
+            skipped++
+          } else {
+            mergedSongs.push(song)
+            addedSongs++
+          }
+        }
+        const mergedArtists = [...state.favouriteArtists]
+        let addedArtists = 0
+        for (const artist of artists) {
+          if (mergedArtists.includes(artist)) {
+            skipped++
+          } else if (mergedArtists.length >= MAX_FAVOURITE_ARTISTS) {
+            skipped++
+          } else {
+            mergedArtists.push(artist)
+            addedArtists++
+          }
+        }
+        set({ favourites: mergedSongs, favouriteArtists: mergedArtists })
+        return { addedSongs, addedArtists, skipped }
+      },
       setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
     }),
     {
