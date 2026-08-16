@@ -17,6 +17,7 @@ an `AudioWorklet`, and renders a real-time spectrum visualizer.
 - **Download** — save any track locally from the download icon in the track list, recently played, and favourites.
 - **Recently played** — the last 2 tracks, click to replay.
 - **Favourites** — star up to 7 tracks and up to 7 artists; a **Songs / Artists** toggle in the panel flips between the two lists. Selecting a favourited artist opens their track list. Persisted to `localStorage`.
+- **Export / import favourites** — the ⤓ and ⤒ icons in the favourites header save both lists to a `modplayer-favourites.json` file and load one back in. Imports merge into the current favourites (skipping duplicates and respecting the caps), so lists can be backed up or moved between browsers.
 - **Volume** — horizontal slider fixed bottom-right; drag it or scroll the wheel over it. Persisted.
 - **Spectrum visualizer** — 4 chunky bars (green → yellow → red) centered along the bottom, driven by a Web Audio `AnalyserNode`. Fades to a flat baseline when idle.
 - **Retro UI** — green-on-dark monospace theme over a 16-bit nostalgia backdrop, with the current track scrolling across the header.
@@ -70,6 +71,7 @@ public/
   libopenmpt.worklet.js     # libopenmpt module decoder worklet (.mod, .xm, …)
 src/
   modland.ts                # modland root URL, format folders (Protracker/Fasttracker 2) + track URL builder
+  favouritesFile.ts         # Export/import favourites as JSON (blob download + validating parser)
   audio/audioEngine.ts      # Web Audio graph, playback, AnalyserNode for the visualizer
   hooks/useModland.ts       # TanStack Query hooks: useCreators(), useTracks()
   store/playback.ts         # Zustand store: current track, isPlaying, history, favourite songs + artists, volume
