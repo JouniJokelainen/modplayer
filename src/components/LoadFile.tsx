@@ -5,10 +5,10 @@ interface Props {
 export function LoadFile({ onLoad }: Props) {
   return (
     <label className="shrink-0 px-2 py-1 text-xs uppercase tracking-widest font-mono font-bold border border-retro-accent text-retro-accent hover:bg-retro-active cursor-pointer transition-colors">
-      [ LOAD .MOD FILE ]
+      [ LOAD MODULE FILE ]
       <input
         type="file"
-        accept=".mod"
+        accept=".mod,.xm"
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0]

@@ -1,26 +1,29 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useCreators, useTracks } from './hooks/useModland'
+import { useCreators, useTracks, TrackEntry } from './hooks/useModland'
 import { usePlaybackStore, Track } from './store/playback'
 import { loadMod, play, pause, isPlaying as engineIsPlaying, setVolume as engineSetVolume } from './audio/audioEngine'
 import { SearchBar } from './components/SearchBar'
 import { TrackList } from './components/TrackList'
 import { Player } from './components/Player'
 import { TrackHistory } from './components/TrackHistory'
-import { Favourites } from './components/Favourites'
+import { FavouritesPanel, FavView, ImportStatus } from './components/FavouritesPanel'
 import { SpectrumBars } from './components/SpectrumBars'
 import { VolumeSlider } from './components/VolumeSlider'
 import { Backdrop } from './components/Backdrop'
 import { LoadFile } from './components/LoadFile'
-import { trackUrl } from './modland'
-import { MAX_FAVOURITES } from './store/playback'
+import { MAX_FAVOURITES, MAX_FAVOURITE_ARTISTS } from './store/playback'
+import { exportFavourites, parseFavouritesFile } from './favouritesFile'
 
 export default function App() {
   const [creatorSearch, setCreatorSearch] = useState('')
   const [selectedCreator, setSelectedCreator] = useState<string | null>(null)
   const [trackSearch, setTrackSearch] = useState('')
+  const [favView, setFavView] = useState<FavView>('songs')
 
-  const { currentTrack, isPlaying, history, favourites, volume, setCurrentTrack, setIsPlaying, toggleFavourite, setVolume } =
-    usePlaybackStore()
+  const {
+    currentTrack, isPlaying, history, favourites, favouriteArtists, volume,
+    setCurrentTrack, setIsPlaying, toggleFavourite, toggleFavouriteArtist, importFavourites, setVolume,
+  } = usePlaybackStore()
 
   // Keep the audio engine's gain in sync with the stored volume.
   useEffect(() => {
@@ -34,15 +37,14 @@ export default function App() {
     c.toLowerCase().includes(creatorSearch.toLowerCase())
   )
   const filteredTracks = tracks.filter((t) =>
-    t.toLowerCase().includes(trackSearch.toLowerCase())
+    t.name.toLowerCase().includes(trackSearch.toLowerCase())
   )
 
-  const handlePlayTrack = useCallback(async (name: string) => {
+  const handlePlayTrack = useCallback(async (entry: TrackEntry) => {
     if (!selectedCreator) return
-    const url = trackUrl(selectedCreator, name)
-    const track: Track = { creator: selectedCreator, name, url }
+    const track: Track = { creator: selectedCreator, name: entry.name, url: entry.url }
     try {
-      await loadMod(url)
+      await loadMod(entry.url)
       setCurrentTrack(track)
       play()
       setIsPlaying(true)
@@ -52,11 +54,19 @@ export default function App() {
   }, [selectedCreator, setCurrentTrack, setIsPlaying])
 
   const favouriteUrls = new Set(favourites.map((f) => f.url))
+  const favouriteArtistSet = new Set(favouriteArtists)
+  const artistFavouritesFull = favouriteArtists.length >= MAX_FAVOURITE_ARTISTS
 
-  const handleToggleFavourite = useCallback((name: string) => {
+  const handleToggleFavourite = useCallback((entry: TrackEntry) => {
     if (!selectedCreator) return
-    toggleFavourite({ creator: selectedCreator, name, url: trackUrl(selectedCreator, name) })
+    toggleFavourite({ creator: selectedCreator, name: entry.name, url: entry.url })
   }, [selectedCreator, toggleFavourite])
+
+  // Selecting a favourited artist opens their track list in the main pane.
+  const handleSelectFavouriteArtist = useCallback((artist: string) => {
+    setSelectedCreator(artist)
+    setTrackSearch('')
+  }, [])
 
   const handlePlayFromHistory = useCallback(async (track: Track) => {
     try {
@@ -68,6 +78,32 @@ export default function App() {
       console.error('Failed to load track', err)
     }
   }, [setCurrentTrack, setIsPlaying])
+
+  const handleExportFavourites = useCallback(() => {
+    exportFavourites(favourites, favouriteArtists)
+  }, [favourites, favouriteArtists])
+
+  const handleImportFavourites = useCallback(
+    async (file: File): Promise<ImportStatus> => {
+      try {
+        const { songs, artists } = parseFavouritesFile(await file.text())
+        const { addedSongs, addedArtists, skipped } = importFavourites(songs, artists)
+        if (addedSongs === 0 && addedArtists === 0) {
+          return skipped > 0
+            ? { tone: 'warn', message: 'NOTHING ADDED (DUPLICATES OR FULL)' }
+            : { tone: 'warn', message: 'NO FAVOURITES IN FILE' }
+        }
+        const parts: string[] = []
+        if (addedSongs > 0) parts.push(`${addedSongs} SONG${addedSongs === 1 ? '' : 'S'}`)
+        if (addedArtists > 0) parts.push(`${addedArtists} ARTIST${addedArtists === 1 ? '' : 'S'}`)
+        const suffix = skipped > 0 ? ` (${skipped} SKIPPED)` : ''
+        return { tone: skipped > 0 ? 'warn' : 'ok', message: `IMPORTED ${parts.join(', ')}${suffix}` }
+      } catch (err) {
+        return { tone: 'error', message: err instanceof Error ? err.message : 'IMPORT FAILED' }
+      }
+    },
+    [importFavourites]
+  )
 
   // Local files play from a blob URL, so the engine's fetch path works unchanged.
   const handleLoadLocalFile = useCallback(async (file: File) => {
@@ -148,19 +184,43 @@ export default function App() {
             <ul>
               {filteredCreators.map((creator) => {
                 const active = selectedCreator === creator
+                const favArtist = favouriteArtistSet.has(creator)
+                const lockedOut = !favArtist && artistFavouritesFull
                 return (
                   <li key={creator} className={`border-b border-retro-border ${active ? 'bg-retro-active' : ''}`}>
-                    <button
-                      onClick={() => { setSelectedCreator(creator); setTrackSearch('') }}
-                      className={`w-full text-left px-2 py-1.5 text-xs uppercase tracking-wide font-mono flex items-center gap-1.5 transition-colors ${
-                        active
-                          ? 'text-retro-accent font-bold'
-                          : 'text-retro-text hover:text-retro-accent hover:bg-[#0a2a0a]'
-                      }`}
-                    >
-                      <span className="w-3 shrink-0 font-bold">{active ? '>' : ''}</span>
-                      {creator}
-                    </button>
+                    <div className="flex items-center">
+                      <button
+                        onClick={() => { setSelectedCreator(creator); setTrackSearch('') }}
+                        className={`flex-1 min-w-0 text-left px-2 py-1.5 text-xs uppercase tracking-wide font-mono flex items-center gap-1.5 transition-colors ${
+                          active
+                            ? 'text-retro-accent font-bold'
+                            : 'text-retro-text hover:text-retro-accent hover:bg-[#0a2a0a]'
+                        }`}
+                      >
+                        <span className="w-3 shrink-0 font-bold">{active ? '>' : ''}</span>
+                        <span className="truncate">{creator}</span>
+                      </button>
+                      <button
+                        onClick={() => toggleFavouriteArtist(creator)}
+                        disabled={lockedOut}
+                        title={
+                          favArtist
+                            ? 'Remove artist from favourites'
+                            : lockedOut
+                            ? `Favourite artists full (max ${MAX_FAVOURITE_ARTISTS})`
+                            : 'Add artist to favourites'
+                        }
+                        className={`shrink-0 px-2 py-1.5 text-sm transition-colors ${
+                          favArtist
+                            ? 'text-retro-accent hover:text-retro-text'
+                            : lockedOut
+                            ? 'text-retro-border cursor-not-allowed'
+                            : 'text-retro-muted hover:text-retro-accent'
+                        }`}
+                      >
+                        {favArtist ? '★' : '☆'}
+                      </button>
+                    </div>
                   </li>
                 )
               })}
@@ -201,7 +261,6 @@ export default function App() {
                   ) : (
                     <TrackList
                       tracks={filteredTracks}
-                      creator={selectedCreator}
                       currentUrl={currentTrack?.url ?? null}
                       favouriteUrls={favouriteUrls}
                       favouritesFull={favourites.length >= MAX_FAVOURITES}
@@ -231,13 +290,26 @@ export default function App() {
               of the volume slider floating over this corner. */}
           <div className="flex-1 min-h-0 overflow-y-auto pb-14">
             <div className="p-2">
-              <TrackHistory history={history} onPlay={handlePlayFromHistory} />
+              <TrackHistory
+                history={history}
+                favouriteUrls={favouriteUrls}
+                favouritesFull={favourites.length >= MAX_FAVOURITES}
+                onPlay={handlePlayFromHistory}
+                onToggleFavourite={toggleFavourite}
+              />
             </div>
             <div className="px-2 pb-2">
-              <Favourites
+              <FavouritesPanel
+                view={favView}
+                onSetView={setFavView}
                 favourites={favourites}
-                onPlay={handlePlayFromHistory}
-                onRemove={toggleFavourite}
+                favouriteArtists={favouriteArtists}
+                onPlaySong={handlePlayFromHistory}
+                onRemoveSong={toggleFavourite}
+                onSelectArtist={handleSelectFavouriteArtist}
+                onRemoveArtist={toggleFavouriteArtist}
+                onExport={handleExportFavourites}
+                onImport={handleImportFavourites}
               />
             </div>
           </div>
