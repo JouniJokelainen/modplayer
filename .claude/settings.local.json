@@ -60,7 +60,11 @@
       "Read(//c/Users/Jouni/AppData/Local/Temp/claude-chrome-screenshots-skuAUL/**)",
       "Bash(cp -f /c/Users/Jouni/AppData/Local/Temp/claude-chrome-screenshots-skuAUL/screenshot-1786782654994-0.jpg /c/Users/Jouni/claude/modplayer/pics/ui.jpg)",
       "PowerShell(npx tsc --noEmit)",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "Bash(git grep *)",
+      "Bash(curl -s -o /dev/null -w \"dev server: %{http_code}\\\\n\" http://localhost:5173/)",
+      "PowerShell($s = \"C:\\\\Users\\\\JOUNI~1.JOK\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-jouni-jokelainen-claude-modplayer\\\\7a4e13cb-47a5-4cbf-8b74-a3ba55ff81dd\\\\scratchpad\"; $env:SHOT_DIR = $s; node \"$s\\\\check-logo-reset.mjs\")",
+      "PowerShell($s = \"C:\\\\Users\\\\JOUNI~1.JOK\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-jouni-jokelainen-claude-modplayer\\\\7a4e13cb-47a5-4cbf-8b74-a3ba55ff81dd\\\\scratchpad\"; node \"$s\\\\check-404s.mjs\")"
     ]
   }
 }
