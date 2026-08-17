@@ -83,6 +83,15 @@ export default function App() {
     }
   }, [setCurrentTrack, setIsPlaying])
 
+  // Clicking the logo acts as "home": back to the unfiltered artist list. The
+  // track filter is cleared too, since the track pane unmounts here and a stale
+  // filter would otherwise reappear with the next artist.
+  const handleResetArtists = useCallback(() => {
+    setCreatorSearch('')
+    setSelectedCreator(null)
+    setTrackSearch('')
+  }, [])
+
   const handleToggle = useCallback(() => {
     if (engineIsPlaying()) {
       pause()
@@ -97,9 +106,15 @@ export default function App() {
     <div className="h-screen bg-retro-bg text-retro-text font-mono flex flex-col">
       {/* Header */}
       <header className="border-b-2 border-retro-accent bg-retro-panel px-3 py-2 flex items-center gap-4 shrink-0 overflow-hidden">
-        <span className="text-retro-accent uppercase tracking-widest font-bold shrink-0" style={{ fontSize: '24px' }}>
+        <button
+          type="button"
+          onClick={handleResetArtists}
+          title="Reset artist filter"
+          className="text-retro-accent uppercase tracking-widest font-bold shrink-0 hover:text-retro-text transition-colors"
+          style={{ fontSize: '24px' }}
+        >
           MODPLAYER
-        </span>
+        </button>
         <LoadFile onLoad={handleLoadLocalFile} />
         {currentTrack && (
           <div className="marquee flex-1 overflow-hidden">
