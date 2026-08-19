@@ -30,6 +30,20 @@ export default function App() {
     engineSetVolume(volume)
   }, [volume])
 
+  // Seed favourites from the bundled default file on a brand-new browser
+  // (nothing in localStorage yet). Never overwrites favourites the user
+  // already has locally; failures (no file, bad JSON) are silently ignored.
+  useEffect(() => {
+    if (favourites.length > 0 || favouriteArtists.length > 0) return
+    fetch(`${import.meta.env.BASE_URL}modplayer-favourites.json`)
+      .then((res) => (res.ok ? res.text() : Promise.reject()))
+      .then((text) => {
+        const { songs, artists } = parseFavouritesFile(text)
+        importFavourites(songs, artists)
+      })
+      .catch(() => {})
+  }, [])
+
   const { data: creators = [], isLoading: loadingCreators } = useCreators()
   const { data: tracks = [], isLoading: loadingTracks } = useTracks(selectedCreator)
 
