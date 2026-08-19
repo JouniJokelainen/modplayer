@@ -22,7 +22,8 @@ export default function App() {
 
   const {
     currentTrack, isPlaying, history, favourites, favouriteArtists, volume,
-    setCurrentTrack, setIsPlaying, toggleFavourite, toggleFavouriteArtist, importFavourites, setVolume,
+    setCurrentTrack, setIsPlaying, toggleFavourite, toggleFavouriteArtist,
+    reorderFavourites, reorderFavouriteArtists, importFavourites, setVolume,
   } = usePlaybackStore()
 
   // Keep the audio engine's gain in sync with the stored volume.
@@ -322,6 +323,8 @@ export default function App() {
                 onRemoveSong={toggleFavourite}
                 onSelectArtist={handleSelectFavouriteArtist}
                 onRemoveArtist={toggleFavouriteArtist}
+                onReorderSongs={reorderFavourites}
+                onReorderArtists={reorderFavouriteArtists}
                 onExport={handleExportFavourites}
                 onImport={handleImportFavourites}
               />

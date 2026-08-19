@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { GripVertical } from 'lucide-react'
 import { Track } from '../store/playback'
 import { DownloadLink } from './DownloadLink'
+import { useDragReorder } from '../hooks/useDragReorder'
 
 export type FavView = 'songs' | 'artists'
 
@@ -18,6 +20,8 @@ interface Props {
   onRemoveSong: (track: Track) => void
   onSelectArtist: (artist: string) => void
   onRemoveArtist: (artist: string) => void
+  onReorderSongs: (fromIndex: number, toIndex: number) => void
+  onReorderArtists: (fromIndex: number, toIndex: number) => void
   onExport: () => void
   onImport: (file: File) => Promise<ImportStatus>
 }
@@ -31,11 +35,15 @@ export function FavouritesPanel({
   onRemoveSong,
   onSelectArtist,
   onRemoveArtist,
+  onReorderSongs,
+  onReorderArtists,
   onExport,
   onImport,
 }: Props) {
   const [status, setStatus] = useState<ImportStatus | null>(null)
   const clearTimer = useRef<ReturnType<typeof setTimeout>>()
+  const songDrag = useDragReorder(onReorderSongs)
+  const artistDrag = useDragReorder(onReorderArtists)
 
   // Show an import result briefly, then fade it out. A single shared timer is
   // reset on each new result so rapid imports don't leave a stale message.
@@ -118,8 +126,26 @@ export function FavouritesPanel({
         ) : (
           <ul>
             {favourites.map((track, i) => (
-              <li key={track.url} className={i < favourites.length - 1 ? 'border-b border-retro-border' : ''}>
+              <li
+                key={track.url}
+                onDragOver={songDrag.handleDragOver(i)}
+                onDrop={songDrag.handleDrop(i)}
+                onDragEnd={songDrag.handleDragEnd}
+                className={`${i < favourites.length - 1 ? 'border-b border-retro-border' : ''} ${
+                  songDrag.overIndex === i && songDrag.dragIndex !== null && songDrag.dragIndex !== i
+                    ? 'border-t-2 border-t-retro-accent'
+                    : ''
+                } ${songDrag.dragIndex === i ? 'opacity-40' : ''}`}
+              >
                 <div className="flex items-center group">
+                  <span
+                    draggable
+                    onDragStart={songDrag.handleDragStart(i)}
+                    title="Drag to reorder"
+                    className="shrink-0 px-1 self-stretch flex items-center cursor-grab active:cursor-grabbing text-retro-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <GripVertical size={12} />
+                  </span>
                   <button
                     onClick={() => onPlaySong(track)}
                     className="flex-1 min-w-0 text-left px-2 py-1.5 hover:bg-[#0a2a0a]"
@@ -147,8 +173,26 @@ export function FavouritesPanel({
       ) : (
         <ul>
           {favouriteArtists.map((artist, i) => (
-            <li key={artist} className={i < favouriteArtists.length - 1 ? 'border-b border-retro-border' : ''}>
+            <li
+              key={artist}
+              onDragOver={artistDrag.handleDragOver(i)}
+              onDrop={artistDrag.handleDrop(i)}
+              onDragEnd={artistDrag.handleDragEnd}
+              className={`${i < favouriteArtists.length - 1 ? 'border-b border-retro-border' : ''} ${
+                artistDrag.overIndex === i && artistDrag.dragIndex !== null && artistDrag.dragIndex !== i
+                  ? 'border-t-2 border-t-retro-accent'
+                  : ''
+              } ${artistDrag.dragIndex === i ? 'opacity-40' : ''}`}
+            >
               <div className="flex items-center group">
+                <span
+                  draggable
+                  onDragStart={artistDrag.handleDragStart(i)}
+                  title="Drag to reorder"
+                  className="shrink-0 px-1 self-stretch flex items-center cursor-grab active:cursor-grabbing text-retro-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <GripVertical size={12} />
+                </span>
                 <button
                   onClick={() => onSelectArtist(artist)}
                   title="Show this artist's tracks"

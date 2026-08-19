@@ -21,6 +21,8 @@ interface PlaybackState {
   setIsPlaying: (playing: boolean) => void
   toggleFavourite: (track: Track) => void
   toggleFavouriteArtist: (artist: string) => void
+  reorderFavourites: (fromIndex: number, toIndex: number) => void
+  reorderFavouriteArtists: (fromIndex: number, toIndex: number) => void
   importFavourites: (songs: Track[], artists: string[]) => ImportResult
   setVolume: (volume: number) => void
 }
@@ -32,6 +34,14 @@ export interface ImportResult {
   addedSongs: number
   addedArtists: number
   skipped: number
+}
+
+function moveItem<T>(arr: T[], from: number, to: number): T[] {
+  if (from === to || from < 0 || to < 0 || from >= arr.length || to >= arr.length) return arr
+  const copy = arr.slice()
+  const [item] = copy.splice(from, 1)
+  copy.splice(to, 0, item)
+  return copy
 }
 
 export const usePlaybackStore = create<PlaybackState>()(
@@ -69,6 +79,10 @@ export const usePlaybackStore = create<PlaybackState>()(
           if (state.favouriteArtists.length >= MAX_FAVOURITE_ARTISTS) return state
           return { favouriteArtists: [...state.favouriteArtists, artist] }
         }),
+      reorderFavourites: (fromIndex, toIndex) =>
+        set((state) => ({ favourites: moveItem(state.favourites, fromIndex, toIndex) })),
+      reorderFavouriteArtists: (fromIndex, toIndex) =>
+        set((state) => ({ favouriteArtists: moveItem(state.favouriteArtists, fromIndex, toIndex) })),
       importFavourites: (songs, artists) => {
         const state = get()
         // Merge into the existing lists: skip duplicates (songs by url, artists
