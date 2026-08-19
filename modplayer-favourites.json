@@ -1,0 +1,48 @@
+{
+  "type": "modplayer-favourites",
+  "version": 1,
+  "favourites": [
+    {
+      "creator": "Lizardking",
+      "name": "trans atlantic.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Lizardking/trans%20atlantic.mod"
+    },
+    {
+      "creator": "Elwood",
+      "name": "deadlock.xm",
+      "url": "https://modland.com/pub/modules/Fasttracker%202/Elwood/deadlock.xm"
+    },
+    {
+      "creator": "Radix",
+      "name": "supernova.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Radix/supernova.mod"
+    },
+    {
+      "creator": "Captain",
+      "name": "space_debris.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Captain/space_debris.mod"
+    },
+    {
+      "creator": "Captain",
+      "name": "broken dreams.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Captain/broken%20dreams.mod"
+    },
+    {
+      "creator": "Captain",
+      "name": "beyond music.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Captain/beyond%20music.mod"
+    },
+    {
+      "creator": "Lizardking",
+      "name": "airwolf.mod",
+      "url": "https://modland.com/pub/modules/Protracker/Lizardking/airwolf.mod"
+    }
+  ],
+  "favouriteArtists": [
+    "Dr. Awesome",
+    "Lizardking",
+    "Purple Motion",
+    "Elwood",
+    "Captain"
+  ]
+}
